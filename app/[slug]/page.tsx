@@ -1,6 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { BusinessDetailPage } from "@/components/business-detail-page";
 
 // Reserved slugs that should not be treated as business pages
@@ -14,7 +14,19 @@ const RESERVED_SLUGS = [
   "setup",
   "categoria",
   "negocio",
+  "_next",
+  "favicon.ico",
+  "robots.txt",
+  "sitemap.xml",
 ];
+
+// Check if slug is reserved (case insensitive, handles nested routes)
+function isReservedRoute(slug: string): boolean {
+  const lowerSlug = slug.toLowerCase();
+  return RESERVED_SLUGS.some(reserved => 
+    lowerSlug === reserved || lowerSlug.startsWith(`${reserved}/`)
+  );
+}
 
 interface BusinessPageProps {
   params: Promise<{ slug: string }>;
@@ -26,7 +38,7 @@ export async function generateMetadata({
   const { slug } = await params;
 
   // Skip reserved routes
-  if (RESERVED_SLUGS.includes(slug)) {
+  if (isReservedRoute(slug)) {
     return {};
   }
 
@@ -121,9 +133,16 @@ function generateJsonLd(listing: {
 export default async function BusinessPage({ params }: BusinessPageProps) {
   const { slug } = await params;
 
-  // Skip reserved routes - let Next.js handle them
-  if (RESERVED_SLUGS.includes(slug)) {
-    notFound();
+  console.log("[v0] BusinessPage called with slug:", slug);
+
+  // Reserved routes should be handled by their own page.tsx files
+  // If this dynamic route catches a reserved slug, something is wrong
+  // Just return null to avoid conflicts
+  if (isReservedRoute(slug)) {
+    console.log("[v0] Slug is reserved:", slug);
+    // Return null - Next.js should handle static routes first
+    // This is a fallback in case routing doesn't work as expected
+    return null;
   }
 
   const supabase = await createClient();
@@ -137,6 +156,7 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
     .single();
 
   if (error || !listing) {
+    console.log("[v0] Listing not found for slug:", slug, error);
     notFound();
   }
 
