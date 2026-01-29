@@ -263,14 +263,14 @@ export function AdvertiserDashboard({
                           <span className="text-xl">
                             {listing.category?.icon || "🏢"}
                           </span>
-                          <h3 className="font-semibold">{listing.name}</h3>
+                          <h3 className="font-semibold">{listing.title}</h3>
                           <Badge className={`gap-1 ${status.color}`}>
                             {status.icon}
                             {status.label}
                           </Badge>
-                          {listing.subscription_tier !== "free" && (
+                          {listing.plan_tier !== "free" && (
                             <Badge variant="outline">
-                              {listing.subscription_tier === "premium"
+                              {listing.plan_tier === "premium"
                                 ? "Premium"
                                 : "Básico"}
                             </Badge>
@@ -303,7 +303,7 @@ export function AdvertiserDashboard({
 
                       <div className="flex items-center gap-2">
                         {listing.status === "active" && (
-                          <Link href={`/negocio/${listing.slug}`}>
+                          <Link href={`/${listing.slug}`}>
                             <Button variant="outline" size="sm" className="gap-1 bg-transparent">
                               Ver Página
                               <ChevronRight className="h-4 w-4" />
@@ -369,11 +369,11 @@ export function AdvertiserDashboard({
                   .map((listing) => (
                     <div key={listing.id} className="rounded-lg bg-muted/50 p-4">
                       <div className="mb-3 flex items-center justify-between">
-                        <h4 className="font-medium">{listing.name}</h4>
+                        <h4 className="font-medium">{listing.title}</h4>
                         <Badge variant="outline">
-                          {listing.subscription_tier === "free"
+                          {listing.plan_tier === "free"
                             ? "Gratuito"
-                            : listing.subscription_tier}
+                            : listing.plan_tier}
                         </Badge>
                       </div>
                       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -420,7 +420,7 @@ export function AdvertiserDashboard({
         )}
 
         {/* Upgrade CTA */}
-        {listings.some((l) => l.subscription_tier === "free") && (
+        {listings.some((l) => l.plan_tier === "free") && (
           <Card className="mt-8 border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
             <CardContent className="flex flex-col items-center gap-4 p-8 text-center sm:flex-row sm:text-left">
               <div className="flex-1">

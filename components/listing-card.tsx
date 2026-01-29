@@ -52,29 +52,29 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
 
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (listing.whatsapp) {
-      const phone = listing.whatsapp.replace(/\D/g, "");
-      window.open(`https://wa.me/55${phone}`, "_blank");
+    if (listing.phone_whatsapp) {
+      const phone = listing.phone_whatsapp.replace(/\D/g, "");
+      window.open(`https://wa.me/${phone}?text=Vi+no+EncontreUm`, "_blank");
       onContact?.("whatsapp", listing.id);
     }
   };
 
   const handlePhoneClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (listing.phone) {
-      window.location.href = `tel:${listing.phone}`;
+    if (listing.phone_primary) {
+      window.location.href = `tel:${listing.phone_primary}`;
       onContact?.("phone", listing.id);
     }
   };
 
   return (
     <Card className="group overflow-hidden border-border/50 transition-all hover:border-primary/30 hover:shadow-lg">
-      <Link href={`/negocio/${listing.slug}`}>
+      <Link href={`/${listing.slug}`}>
         <div className="relative h-40 overflow-hidden bg-muted">
           {listing.cover_url ? (
             <Image
               src={listing.cover_url || "/placeholder.svg"}
-              alt={listing.name}
+              alt={listing.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
             />
@@ -85,7 +85,7 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
               </span>
             </div>
           )}
-          {listing.subscription_tier === "premium" && (
+          {listing.plan_tier === "premium" && (
             <Badge className="absolute left-2 top-2 bg-amber-500 text-amber-950 hover:bg-amber-500">
               Destaque
             </Badge>
@@ -105,9 +105,9 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
       <CardContent className="p-4">
         <div className="mb-3">
           <div className="flex items-start justify-between gap-2">
-            <Link href={`/negocio/${listing.slug}`} className="flex-1">
+            <Link href={`/${listing.slug}`} className="flex-1">
               <h3 className="line-clamp-1 font-semibold text-foreground transition-colors hover:text-primary">
-                {listing.name}
+                {listing.title}
               </h3>
             </Link>
             {listing.average_rating > 0 && (
@@ -149,7 +149,7 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
         </div>
 
         <div className="flex gap-2">
-          {listing.whatsapp && (
+          {listing.phone_whatsapp && (
             <Button
               onClick={handleWhatsAppClick}
               className="flex-1 gap-2 bg-[#25D366] text-white hover:bg-[#20bd5a]"
@@ -159,13 +159,13 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
               WhatsApp
             </Button>
           )}
-          {listing.phone && (
+          {listing.phone_primary && (
             <Button
               onClick={handlePhoneClick}
-              variant={listing.whatsapp ? "outline" : "default"}
+              variant={listing.phone_whatsapp ? "outline" : "default"}
               className={
-                listing.whatsapp
-                  ? "flex-1 gap-2"
+                listing.phone_whatsapp
+                  ? "flex-1 gap-2 bg-transparent"
                   : "flex-1 gap-2 bg-[#25D366] text-white hover:bg-[#20bd5a]"
               }
               size="lg"

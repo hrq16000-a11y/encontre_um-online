@@ -22,14 +22,14 @@ export async function GET(request: NextRequest) {
       { count: "exact" }
     )
     .eq("status", "active")
-    .order("subscription_tier", { ascending: false })
+    .order("plan_tier", { ascending: false })
     .order("average_rating", { ascending: false })
     .order("review_count", { ascending: false })
     .range(offset, offset + limit - 1);
 
   if (query) {
     queryBuilder = queryBuilder.or(
-      `name.ilike.%${query}%,description.ilike.%${query}%`
+      `title.ilike.%${query}%,description.ilike.%${query}%`
     );
   }
 

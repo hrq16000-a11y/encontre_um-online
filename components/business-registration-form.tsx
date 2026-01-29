@@ -463,15 +463,39 @@ export function BusinessRegistrationForm({
               <CardContent className="space-y-6">
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="name">Nome do Negócio *</Label>
+                    <Label htmlFor="title">Nome do Negócio *</Label>
                     <Input
-                      id="name"
-                      value={formData.name}
+                      id="title"
+                      value={formData.title}
                       onChange={(e) =>
-                        setFormData({ ...formData, name: e.target.value })
+                        setFormData({ ...formData, title: e.target.value })
                       }
-                      placeholder="Ex: Dentista Silva"
+                      placeholder="Ex: Ping Soluções"
                     />
+                  </div>
+
+                  <div className="grid gap-2">
+                    <Label htmlFor="slug" className="flex items-center gap-2">
+                      <LinkIcon className="h-4 w-4" />
+                      Link do Perfil *
+                    </Label>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm text-muted-foreground">encontreum.com.br/</span>
+                      <Input
+                        id="slug"
+                        value={formData.slug}
+                        onChange={(e) =>
+                          setFormData({ ...formData, slug: generateSlug(e.target.value) })
+                        }
+                        placeholder="pingsolucoes"
+                        className="flex-1"
+                      />
+                    </div>
+                    {formData.slug && (
+                      <p className={`text-xs ${checkingSlug ? "text-muted-foreground" : slugAvailable ? "text-green-600" : "text-destructive"}`}>
+                        {checkingSlug ? "Verificando..." : slugAvailable ? "Link disponível!" : "Link já em uso. Escolha outro."}
+                      </p>
+                    )}
                   </div>
 
                   <div className="grid gap-2">
@@ -516,25 +540,32 @@ export function BusinessRegistrationForm({
                   </h3>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="grid gap-2">
-                      <Label htmlFor="phone">Telefone</Label>
+                      <Label htmlFor="phone_whatsapp" className="flex items-center gap-2">
+                        WhatsApp *
+                        <span className="text-xs text-green-600">(Principal)</span>
+                      </Label>
                       <Input
-                        id="phone"
-                        value={formData.phone}
+                        id="phone_whatsapp"
+                        value={formData.phone_whatsapp}
                         onChange={(e) =>
-                          setFormData({ ...formData, phone: e.target.value })
+                          setFormData({ ...formData, phone_whatsapp: e.target.value })
                         }
-                        placeholder="(11) 3333-3333"
+                        placeholder="5541999999999"
+                        className="border-green-200 focus:border-green-500"
                       />
+                      <p className="text-xs text-muted-foreground">
+                        Formato: 5541999999999 (com código do país)
+                      </p>
                     </div>
                     <div className="grid gap-2">
-                      <Label htmlFor="whatsapp">WhatsApp</Label>
+                      <Label htmlFor="phone_primary">Telefone Fixo</Label>
                       <Input
-                        id="whatsapp"
-                        value={formData.whatsapp}
+                        id="phone_primary"
+                        value={formData.phone_primary}
                         onChange={(e) =>
-                          setFormData({ ...formData, whatsapp: e.target.value })
+                          setFormData({ ...formData, phone_primary: e.target.value })
                         }
-                        placeholder="(11) 99999-9999"
+                        placeholder="(41) 3333-3333"
                       />
                     </div>
                     <div className="grid gap-2">
@@ -570,47 +601,47 @@ export function BusinessRegistrationForm({
                   </h3>
                   <div className="grid gap-4">
                     <div className="grid gap-2">
-                      <Label htmlFor="address">Endereço</Label>
+                      <Label htmlFor="address_full">Endereço Completo</Label>
                       <Input
-                        id="address"
-                        value={formData.address}
+                        id="address_full"
+                        value={formData.address_full}
                         onChange={(e) =>
-                          setFormData({ ...formData, address: e.target.value })
+                          setFormData({ ...formData, address_full: e.target.value })
                         }
                         placeholder="Rua, número, complemento"
                       />
                     </div>
                     <div className="grid gap-4 sm:grid-cols-3">
                       <div className="grid gap-2">
-                        <Label htmlFor="city">Cidade</Label>
+                        <Label htmlFor="city">Cidade *</Label>
                         <Input
                           id="city"
                           value={formData.city}
                           onChange={(e) =>
                             setFormData({ ...formData, city: e.target.value })
                           }
-                          placeholder="São Paulo"
+                          placeholder="Curitiba"
                         />
                       </div>
                       <div className="grid gap-2">
-                        <Label htmlFor="state">Estado</Label>
+                        <Label htmlFor="state">Estado *</Label>
                         <Input
                           id="state"
                           value={formData.state}
                           onChange={(e) =>
                             setFormData({ ...formData, state: e.target.value })
                           }
-                          placeholder="SP"
+                          placeholder="PR"
                           maxLength={2}
                         />
                       </div>
                       <div className="grid gap-2">
-                        <Label htmlFor="zip">CEP</Label>
+                        <Label htmlFor="postal_code">CEP</Label>
                         <Input
-                          id="zip"
-                          value={formData.zip_code}
+                          id="postal_code"
+                          value={formData.postal_code}
                           onChange={(e) =>
-                            setFormData({ ...formData, zip_code: e.target.value })
+                            setFormData({ ...formData, postal_code: e.target.value })
                           }
                           placeholder="00000-000"
                         />
