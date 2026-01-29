@@ -1,9 +1,13 @@
 import { Header } from "@/components/header";
 import { HeroSection } from "@/components/hero-section";
-import { AIRegistrationSection } from "@/components/ai-registration-section";
-import { ContactCardsSection } from "@/components/contact-cards-section";
-import { SEOCategoriesSection } from "@/components/seo-categories-section";
+import { CategoriesSection } from "@/components/categories-section";
+import { FeaturedProfessionalsSection } from "@/components/featured-professionals-section";
+import { RecentProfessionalsSection } from "@/components/recent-professionals-section";
+import { CitiesSection } from "@/components/cities-section";
+import { HowItWorksSection } from "@/components/how-it-works-section";
 import { BusinessCTASection } from "@/components/business-cta-section";
+import { TestimonialsSection } from "@/components/testimonials-section";
+import { FinalCTASection } from "@/components/final-cta-section";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
@@ -12,10 +16,14 @@ export default function Home() {
       <Header />
       <main className="pt-16">
         <HeroSection />
-        <AIRegistrationSection />
-        <ContactCardsSection />
-        <SEOCategoriesSection />
+        <CategoriesSection />
+        <FeaturedProfessionalsSection />
+        <RecentProfessionalsSection />
+        <CitiesSection />
+        <HowItWorksSection />
         <BusinessCTASection />
+        <TestimonialsSection />
+        <FinalCTASection />
       </main>
       <Footer />
     </>

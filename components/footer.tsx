@@ -4,17 +4,17 @@ const footerLinks = {
   produto: [
     { label: "Como funciona", href: "/como-funciona" },
     { label: "Para empresas", href: "/empresas" },
-    { label: "Preços", href: "/precos" },
+    { label: "Precos", href: "/precos" },
     { label: "API", href: "/api" },
   ],
   categorias: [
-    { label: "Dentistas", href: "/categoria/dentistas" },
-    { label: "Mecânicos", href: "/categoria/mecanicos" },
-    { label: "Restaurantes", href: "/categoria/restaurantes" },
-    { label: "Ver todas", href: "/categorias" },
+    { label: "Dentistas", href: "/buscar?categoria=dentista" },
+    { label: "Mecanicos", href: "/buscar?categoria=mecanico" },
+    { label: "Eletricistas", href: "/buscar?categoria=eletricista" },
+    { label: "Ver todas", href: "/buscar" },
   ],
   empresa: [
-    { label: "Sobre nós", href: "/sobre" },
+    { label: "Sobre nos", href: "/sobre" },
     { label: "Blog", href: "/blog" },
     { label: "Carreiras", href: "/carreiras" },
     { label: "Contato", href: "/contato" },
@@ -34,11 +34,14 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-12">
           {/* Brand Column */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="text-xl font-bold text-background">
-              Encontre Um
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center text-primary-foreground font-bold text-sm">
+                1
+              </div>
+              <span className="text-xl font-bold text-background">EncontreUm</span>
             </Link>
-            <p className="mt-4 text-sm text-background/60">
-              A conexão mais rápida entre você e quem resolve.
+            <p className="text-sm text-background/60">
+              Encontre profissionais e servicos perto de voce.
             </p>
           </div>
 
@@ -114,10 +117,10 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-background/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-background/60">
-            © {new Date().getFullYear()} Encontre Um. Todos os direitos reservados.
+            {new Date().getFullYear()} EncontreUm. Todos os direitos reservados.
           </p>
-          <p className="text-sm text-background/60">
-            Feito com carinho no Brasil 🇧🇷
+          <p className="text-sm text-background/40 flex items-center gap-2">
+            Built with v0
           </p>
         </div>
       </div>
