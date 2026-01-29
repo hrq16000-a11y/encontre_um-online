@@ -81,9 +81,17 @@ export default function SetupPage() {
                 </div>
               </div>
 
-              <Button asChild className="w-full">
-                <a href="/auth/login">Ir para Login</a>
-              </Button>
+              <div className="flex flex-col gap-2">
+                <Button asChild className="w-full">
+                  <a href="/auth/login">Ir para Login</a>
+                </Button>
+                <Button asChild variant="outline" className="w-full bg-transparent">
+                  <a href="/pingsolucoes">Ver Exemplo: Ping Soluções</a>
+                </Button>
+                <Button asChild variant="outline" className="w-full bg-transparent">
+                  <a href="/buscar">Buscar Negócios</a>
+                </Button>
+              </div>
             </div>
           )}
 

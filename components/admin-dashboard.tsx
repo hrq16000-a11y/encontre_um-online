@@ -259,7 +259,7 @@ export function AdminDashboard({
                               <span className="text-xl">
                                 {listing.category?.icon || "🏢"}
                               </span>
-                              <h3 className="font-semibold">{listing.name}</h3>
+                              <h3 className="font-semibold">{listing.title}</h3>
                               <Badge variant="outline">
                                 {listing.category?.name}
                               </Badge>
@@ -274,13 +274,13 @@ export function AdminDashboard({
                                 <span className="text-muted-foreground">
                                   Telefone:{" "}
                                 </span>
-                                {listing.phone || "—"}
+                                {listing.phone_primary || "—"}
                               </div>
                               <div>
                                 <span className="text-muted-foreground">
                                   WhatsApp:{" "}
                                 </span>
-                                {listing.whatsapp || "—"}
+                                {listing.phone_whatsapp || "—"}
                               </div>
                               <div>
                                 <span className="text-muted-foreground">
@@ -337,7 +337,7 @@ export function AdminDashboard({
                                 setRejectDialog({
                                   open: true,
                                   listingId: listing.id,
-                                  listingName: listing.name,
+                                  listingName: listing.title,
                                 })
                               }
                               disabled={isProcessing === listing.id}
@@ -381,7 +381,7 @@ export function AdminDashboard({
                           {listing.category?.icon || "🏢"}
                         </span>
                         <div>
-                          <h4 className="font-medium">{listing.name}</h4>
+                          <h4 className="font-medium">{listing.title}</h4>
                           <p className="text-sm text-muted-foreground">
                             {listing.category?.name} •{" "}
                             {new Date(listing.created_at).toLocaleDateString(
@@ -415,7 +415,7 @@ export function AdminDashboard({
                           {listing.contact_count}
                         </div>
                         {listing.status === "active" && (
-                          <Link href={`/negocio/${listing.slug}`}>
+                          <Link href={`/${listing.slug}`}>
                             <Button variant="ghost" size="icon">
                               <ChevronRight className="h-4 w-4" />
                             </Button>

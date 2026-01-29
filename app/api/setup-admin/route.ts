@@ -1,5 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import { NextResponse } from "next/server";
+import { createSampleListings } from "./createSampleListings"; // Import the createSampleListings function
 
 export async function POST(request: Request) {
   try {
@@ -83,11 +84,14 @@ export async function POST(request: Request) {
       if (profileError) {
         console.error("Profile error:", profileError);
       }
+
+      // Create sample listings
+      await createSampleListings(supabaseAdmin, authData.user.id);
     }
 
     return NextResponse.json({
       success: true,
-      message: "Admin criado com sucesso!",
+      message: "Admin e negócios de exemplo criados!",
       credentials: {
         email: adminEmail,
         password: adminPassword,
