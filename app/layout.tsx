@@ -7,13 +7,13 @@ import './globals.css'
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: 'EncontreUm - Encontre Profissionais e Servicos',
-  description: 'O maior diretorio de profissionais e servicos do Brasil. Conectamos voce aos melhores profissionais da sua cidade. Mecanicos, eletricistas, encanadores, advogados e mais.',
-  keywords: 'profissionais, servicos, mecanico, eletricista, encanador, advogado, dentista, contador, Brasil',
+  title: 'Encontre Um | O Diretório Local de Negócios',
+  description: 'A conexão mais rápida entre você e quem resolve. Encontre dentistas, mecânicos, restaurantes e mais negócios locais. Cadastro com IA em segundos.',
+  keywords: 'diretório local, negócios, dentistas, mecânicos, restaurantes, WhatsApp, contato direto, Brasil',
   generator: 'v0.app',
   openGraph: {
-    title: 'EncontreUm - Encontre Profissionais e Servicos',
-    description: 'O maior diretorio de profissionais e servicos do Brasil.',
+    title: 'Encontre Um | O Diretório Local de Negócios',
+    description: 'A conexão mais rápida entre você e quem resolve.',
     type: 'website',
     locale: 'pt_BR',
   },
