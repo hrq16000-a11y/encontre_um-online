@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, MapPin, Users, Grid3X3, Building2, Star } from "lucide-react";
+import { Search, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
@@ -34,14 +34,7 @@ const cities = [
   "Sao Jose dos Pinhais,PR",
 ];
 
-const stats = [
-  { icon: Users, value: "500+", label: "Profissionais Ativos" },
-  { icon: Grid3X3, value: "10", label: "Categorias" },
-  { icon: Building2, value: "13", label: "Cidades" },
-  { icon: Star, value: "4.8", label: "Avaliacao Media" },
-];
-
-export function HeroSection() {
+export function FinalCTASection() {
   const [profession, setProfession] = useState("");
   const [city, setCity] = useState("");
   const router = useRouter();
@@ -55,29 +48,14 @@ export function HeroSection() {
   };
 
   return (
-    <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary),0.1),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(var(--accent),0.05),transparent_50%)]" />
-
-      <div className="relative z-10 w-full max-w-4xl mx-auto text-center">
-        {/* Logo/Brand */}
-        <div className="mb-6">
-          <span className="inline-block px-4 py-1.5 bg-primary/10 rounded-full text-sm font-medium text-primary">
-            EncontreUm
-          </span>
-        </div>
-
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 text-balance">
-          Encontre Um
-          <br />
-          <span className="text-primary">Profissional Ideal</span>
-        </h1>
-
-        {/* Subheadline */}
-        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-balance">
-          O maior diretorio de profissionais e servicos do Brasil. Conectamos voce aos melhores profissionais da sua cidade.
+    <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-background">
+      <div className="max-w-4xl mx-auto text-center">
+        {/* Header */}
+        <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-foreground mb-6 text-balance">
+          Pronto para encontrar o profissional ideal?
+        </h2>
+        <p className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
+          Milhares de profissionais verificados esperando para atender voce
         </p>
 
         {/* Search Form */}
@@ -120,28 +98,6 @@ export function HeroSection() {
             </Button>
           </div>
         </form>
-
-        {/* Trust Indicator */}
-        <p className="mt-8 text-sm text-muted-foreground">
-          Mais de <span className="font-semibold text-foreground">8+ profissionais</span> cadastrados em{" "}
-          <span className="font-semibold text-foreground">13 cidades</span>
-        </p>
-
-        {/* Stats Grid */}
-        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-3">
-                  <Icon className="h-6 w-6 text-primary" />
-                </div>
-                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
-            );
-          })}
-        </div>
       </div>
     </section>
   );
