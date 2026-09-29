@@ -118,7 +118,12 @@ export function AdminDashboard({
             <Badge variant="secondary">Admin</Badge>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
+            <Link href="/admin/oportunidades">
+              <Button variant="outline" size="sm">
+                Oportunidades
+              </Button>
+            </Link>
             <Link href="/painel">
               <Button variant="outline" size="sm">
                 Ver como Anunciante
