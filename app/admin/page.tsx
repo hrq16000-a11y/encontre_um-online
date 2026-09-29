@@ -82,6 +82,31 @@ export default async function AdminPage() {
     .select("event_type, created_at")
     .gte("created_at", sevenDaysAgo.toISOString());
 
+  const [
+    { count: weeklySearches },
+    { count: weeklyZeroResultSearches },
+    { count: weeklyLeads },
+    { count: newLeads },
+  ] = await Promise.all([
+    supabase
+      .from("search_events")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", sevenDaysAgo.toISOString()),
+    supabase
+      .from("search_events")
+      .select("*", { count: "exact", head: true })
+      .eq("result_count", 0)
+      .gte("created_at", sevenDaysAgo.toISOString()),
+    supabase
+      .from("demand_requests")
+      .select("*", { count: "exact", head: true })
+      .gte("created_at", sevenDaysAgo.toISOString()),
+    supabase
+      .from("demand_requests")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "new"),
+  ]);
+
   // Count events by type
   const analyticsCounts: Record<string, number> = {};
   recentAnalytics?.forEach(event => {
@@ -99,6 +124,10 @@ export default async function AdminPage() {
         totalReviews: totalReviews || 0,
         weeklyViews: analyticsCounts.view || 0,
         weeklyContacts: (analyticsCounts.whatsapp_click || 0) + (analyticsCounts.phone_click || 0),
+        weeklySearches: weeklySearches || 0,
+        weeklyZeroResultSearches: weeklyZeroResultSearches || 0,
+        weeklyLeads: weeklyLeads || 0,
+        newLeads: newLeads || 0,
       }}
       pendingListings={pendingListingsData || []}
       recentListings={recentListings || []}
