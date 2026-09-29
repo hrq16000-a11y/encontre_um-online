@@ -13,9 +13,10 @@ Extract the following fields from the business card image:
 - address: Full address
 - city: City name
 - state: State abbreviation (e.g., SP, RJ, MG)
-- description: A brief description of the business based on what you can infer
+- description: A short description ONLY if the card explicitly states the business activity or services. Otherwise use null
 
-Return ONLY a valid JSON object with these fields. Use null for any field you cannot find.
+Return ONLY a valid JSON object with these fields. Use null for any field you cannot find explicitly in the image.
+Never infer, guess, complete, embellish, or invent business facts, services, addresses, names, or contact data.
 Do not include any markdown formatting or code blocks in your response.
 
 Example response:
@@ -38,6 +39,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Imagem não fornecida" }, { status: 400 });
     }
 
+    const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+    if (!allowedTypes.has(image.type)) {
+      return NextResponse.json(
+        { error: "Formato não suportado. Use JPG, PNG ou WebP." },
+        { status: 415 },
+      );
+    }
+
+    const maxBytes = 5 * 1024 * 1024;
+    if (image.size <= 0 || image.size > maxBytes) {
+      return NextResponse.json(
+        { error: "A imagem deve ter no máximo 5 MB." },
+        { status: 413 },
+      );
+    }
+
     // Convert image to base64
     const bytes = await image.arrayBuffer();
     const buffer = Buffer.from(bytes);
@@ -57,7 +74,7 @@ export async function POST(request: NextRequest) {
             },
             {
               type: "text",
-              text: "Extract all business information from this business card image. Return only the JSON object.",
+              text: "Extract only business information explicitly visible in this image. Do not infer missing facts. Return only the JSON object.",
             },
           ],
         },
