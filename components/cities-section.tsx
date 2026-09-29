@@ -6,9 +6,9 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const cities = [
-  { name: "Sao Paulo", state: "Sao Paulo", slug: "sao-paulo" },
+  { name: "São Paulo", state: "São Paulo", slug: "sao-paulo" },
   { name: "Rio de Janeiro", state: "Rio de Janeiro", slug: "rio-de-janeiro" },
-  { name: "Curitiba", state: "Parana", slug: "curitiba" },
+  { name: "Curitiba", state: "Paraná", slug: "curitiba" },
   { name: "Belo Horizonte", state: "Minas Gerais", slug: "belo-horizonte" },
   { name: "Porto Alegre", state: "Rio Grande do Sul", slug: "porto-alegre" },
   { name: "Salvador", state: "Bahia", slug: "salvador" },
