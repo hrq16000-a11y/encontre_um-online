@@ -1,28 +1,29 @@
 -- Growth telemetry and safe initial taxonomy for EncontreUm.online.
 
+UPDATE public.categories SET icon = '🦷' WHERE slug = 'dentistas';
+UPDATE public.categories SET icon = '🚗' WHERE slug = 'mecanicos';
+UPDATE public.categories SET icon = '🍽️' WHERE slug = 'restaurantes';
+UPDATE public.categories SET icon = '⚖️' WHERE slug = 'advogados';
+UPDATE public.categories SET icon = '🩺' WHERE slug = 'medicos';
+UPDATE public.categories SET icon = '⚡' WHERE slug = 'eletricistas';
+UPDATE public.categories SET icon = '🔧' WHERE slug = 'encanadores';
+UPDATE public.categories SET icon = '✂️' WHERE slug = 'saloes-beleza';
+UPDATE public.categories SET icon = '🏋️' WHERE slug = 'academias';
+UPDATE public.categories SET icon = '🧮' WHERE slug = 'contadores';
+UPDATE public.categories SET icon = '🐾' WHERE slug = 'pet-shops';
+UPDATE public.categories SET icon = '🏠' WHERE slug = 'imobiliarias';
+
 INSERT INTO public.categories (name, slug, icon, description) VALUES
   ('Assistência Técnica', 'assistencia-tecnica', '🛠️', 'Assistência técnica e reparos'),
   ('Informática', 'informatica', '💻', 'Suporte, manutenção e serviços de informática'),
-  ('Eletricistas', 'eletricistas', '⚡', 'Serviços elétricos residenciais e comerciais'),
-  ('Encanadores', 'encanadores', '🔧', 'Serviços hidráulicos, reparos e instalações'),
   ('Ar Condicionado', 'ar-condicionado', '❄️', 'Instalação, manutenção e limpeza de ar-condicionado'),
   ('Montadores de Móveis', 'montadores-de-moveis', '🪑', 'Montagem, desmontagem e ajustes de móveis'),
   ('Limpeza', 'limpeza', '🧹', 'Serviços de limpeza residencial e comercial'),
   ('Pintores', 'pintores', '🎨', 'Pintura residencial e comercial'),
   ('Construção e Reformas', 'construcao-reformas', '🏗️', 'Construção, reformas e manutenção predial'),
-  ('Mecânicos', 'mecanicos', '🚗', 'Oficinas mecânicas e serviços automotivos'),
-  ('Restaurantes e Lanchonetes', 'restaurantes-lanchonetes', '🍽️', 'Restaurantes, lanchonetes e alimentação'),
   ('Barbearias', 'barbearias', '💈', 'Barbearias e cuidados masculinos'),
-  ('Salões de Beleza', 'saloes-de-beleza', '✂️', 'Cabelo, beleza e estética'),
-  ('Pet Shops', 'pet-shops', '🐾', 'Produtos e serviços para animais'),
-  ('Contadores', 'contadores', '🧮', 'Contabilidade e serviços fiscais'),
-  ('Advogados', 'advogados', '⚖️', 'Serviços jurídicos e advocacia'),
-  ('Dentistas', 'dentistas', '🦷', 'Clínicas odontológicas e dentistas'),
   ('Lojas e Comércio Local', 'lojas-comercio-local', '🏪', 'Lojas, varejo e comércio de bairro')
-ON CONFLICT (slug) DO UPDATE SET
-  name = EXCLUDED.name,
-  icon = EXCLUDED.icon,
-  description = EXCLUDED.description;
+ON CONFLICT DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS public.search_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -79,11 +80,7 @@ BEGIN
       new.raw_user_meta_data ->> 'whatsapp_number',
       new.raw_user_meta_data ->> 'phone'
     ),
-    CASE
-      WHEN COALESCE(new.raw_user_meta_data ->> 'role', 'advertiser') = 'admin'
-        THEN 'advertiser'
-      ELSE COALESCE(new.raw_user_meta_data ->> 'role', 'advertiser')
-    END
+    'advertiser'
   )
   ON CONFLICT (id) DO NOTHING;
   RETURN new;
