@@ -263,7 +263,7 @@ export function SearchResults({
                 </div>
               )}
             </>
-          ) : query ? (
+          ) : hasFilters ? (
             <div className="space-y-8 py-12">
               <div className="text-center">
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
@@ -276,7 +276,15 @@ export function SearchResults({
                   Sua procura não precisa terminar aqui.
                 </p>
               </div>
-              <DemandCaptureCard query={query} city={city} />
+              <DemandCaptureCard
+                query={
+                  query ||
+                  categories.find((category) => category.slug === categorySlug)?.name ||
+                  categorySlug ||
+                  "Serviço ou negócio local"
+                }
+                city={city}
+              />
             </div>
           ) : (
             <div className="py-16 text-center">
