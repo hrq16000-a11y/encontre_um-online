@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS public.listings (
   
   -- Contact Information
   phone_primary TEXT,
-  whatsapp_business TEXT,
+  phone_whatsapp TEXT,
   email TEXT,
   website TEXT,
   
