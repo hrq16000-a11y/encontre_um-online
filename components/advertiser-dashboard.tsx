@@ -335,7 +335,7 @@ export function AdvertiserDashboard({
                   Nenhum negócio cadastrado
                 </h3>
                 <p className="mb-4 text-muted-foreground">
-                  Cadastre seu primeiro negócio e comece a receber clientes
+                  Cadastre seu primeiro negócio e comece a divulgar sua atividade
                 </p>
                 <Link href="/cadastrar">
                   <Button className="gap-2">
@@ -368,7 +368,7 @@ export function AdvertiserDashboard({
                             : listing.plan_tier}
                         </Badge>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-muted-foreground">
                             Visualizações
@@ -385,24 +385,6 @@ export function AdvertiserDashboard({
                             {((listing.clicks_whatsapp_count || 0) + (listing.clicks_phone_count || 0))}
                           </p>
                         </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Avaliação
-                          </p>
-                          <p className="text-xl font-semibold">
-                            {listing.average_rating > 0
-                              ? listing.average_rating.toFixed(1)
-                              : "—"}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Avaliações
-                          </p>
-                          <p className="text-xl font-semibold">
-                            {listing.review_count}
-                          </p>
-                        </div>
                       </div>
                     </div>
                   ))}
@@ -411,25 +393,7 @@ export function AdvertiserDashboard({
           </Card>
         )}
 
-        {/* Upgrade CTA */}
-        {listings.some((l) => l.plan_tier === "free") && (
-          <Card className="mt-8 border-primary/30 bg-gradient-to-r from-primary/5 to-primary/10">
-            <CardContent className="flex flex-col items-center gap-4 p-8 text-center sm:flex-row sm:text-left">
-              <div className="flex-1">
-                <h3 className="mb-2 text-xl font-bold">
-                  Destaque seu Negócio
-                </h3>
-                <p className="text-muted-foreground">
-                  Apareça nas primeiras posições das buscas e receba até 5x mais
-                  contatos com o plano Premium.
-                </p>
-              </div>
-              <Button size="lg" className="shrink-0">
-                Ver Planos
-              </Button>
-            </CardContent>
-          </Card>
-        )}
+
       </main>
     </div>
   );

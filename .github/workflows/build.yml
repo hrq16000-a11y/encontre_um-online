@@ -31,5 +31,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: TypeScript check
+        run: pnpm exec tsc --noEmit
+
+      - name: Brand/domain gate
+        run: node scripts/check-brand-domain.mjs
+
       - name: Build
         run: pnpm build
