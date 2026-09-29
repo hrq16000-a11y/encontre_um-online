@@ -31,7 +31,7 @@ export function CitiesSection() {
         {/* Cities Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {cities.map((city) => (
-            <Link key={city.slug} href={`/buscar?cidade=${city.slug}`}>
+            <Link key={city.slug} href={`/buscar?city=${city.slug}`}>
               <Card className="p-6 h-full hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer group text-center">
                 <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 mx-auto group-hover:bg-primary/20 transition-colors">
                   <MapPin className="h-6 w-6 text-primary" />
