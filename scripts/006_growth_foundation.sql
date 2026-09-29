@@ -1,23 +1,10 @@
 -- Growth foundation for EncontreUm.online
+-- Idempotent and compatible with the existing database.
 
--- 1) Seed a practical initial taxonomy. This is taxonomy only, not proof of supply.
+-- 1) Keep only genuinely missing taxonomy entries.
 INSERT INTO public.categories (name, slug, icon, description) VALUES
-  ('Mecânico', 'mecanico', 'wrench', 'Oficinas, manutenção e serviços automotivos'),
-  ('Eletricista', 'eletricista', 'zap', 'Instalações, reparos e manutenção elétrica'),
-  ('Encanador', 'encanador', 'droplet', 'Serviços hidráulicos, vazamentos e encanamento'),
-  ('Advogado', 'advogado', 'scale', 'Serviços jurídicos e advocacia'),
-  ('Dentista', 'dentista', 'stethoscope', 'Clínicas odontológicas e dentistas'),
-  ('Contador', 'contador', 'calculator', 'Contabilidade e apoio fiscal'),
-  ('Pedreiro', 'pedreiro', 'hard-hat', 'Construção, reforma e alvenaria'),
-  ('Pintor', 'pintor', 'paintbrush', 'Pintura residencial e comercial'),
-  ('Informática', 'informatica', 'monitor', 'Suporte, manutenção e assistência de informática'),
-  ('Ar-condicionado', 'ar-condicionado', 'wind', 'Instalação, limpeza e manutenção de climatização'),
-  ('Limpeza', 'limpeza', 'sparkles', 'Limpeza residencial, comercial e pós-obra'),
-  ('Montagem de móveis', 'montagem-moveis', 'hammer', 'Montagem, desmontagem e pequenos ajustes'),
-  ('Restaurantes', 'restaurantes', 'utensils', 'Restaurantes, lanchonetes e alimentação'),
-  ('Beleza', 'beleza', 'scissors', 'Salões, barbearias, manicure e estética'),
-  ('Pet', 'pet', 'paw-print', 'Pet shops, banho, tosa e serviços para animais'),
-  ('Outros serviços', 'outros-servicos', 'briefcase', 'Outros profissionais e serviços locais')
+  ('Pedreiros', 'pedreiros', '🧱', 'Construção, reforma, alvenaria e pequenos reparos'),
+  ('Outros Serviços', 'outros-servicos', '🧰', 'Outros profissionais e serviços locais')
 ON CONFLICT (slug) DO UPDATE SET
   name = EXCLUDED.name,
   icon = EXCLUDED.icon,
@@ -53,8 +40,8 @@ $$;
 CREATE TABLE IF NOT EXISTS public.search_events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
   query TEXT,
-  category TEXT,
   city TEXT,
+  category_slug TEXT,
   result_count INTEGER NOT NULL DEFAULT 0 CHECK (result_count >= 0),
   source_path TEXT,
   user_agent TEXT,
@@ -88,5 +75,5 @@ CREATE INDEX IF NOT EXISTS idx_search_events_created_at
 CREATE INDEX IF NOT EXISTS idx_search_events_city
   ON public.search_events(city);
 
-CREATE INDEX IF NOT EXISTS idx_search_events_category
-  ON public.search_events(category);
+CREATE INDEX IF NOT EXISTS idx_search_events_category_slug
+  ON public.search_events(category_slug);
