@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { normalizeBrazilWhatsApp } from "@/lib/utils/phone";
 
 interface ListingCardProps {
   listing: ListingWithDetails;
@@ -51,7 +52,7 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (listing.phone_whatsapp) {
-      const phone = listing.phone_whatsapp.replace(/\D/g, "");
+      const phone = normalizeBrazilWhatsApp(listing.phone_whatsapp);
       window.open(`https://wa.me/${phone}?text=Vi+no+EncontreUm`, "_blank");
       onContact?.("whatsapp", listing.id);
     }
