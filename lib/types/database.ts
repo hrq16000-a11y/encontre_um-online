@@ -1,14 +1,13 @@
 "use client";
 
-export type UserRole = "user" | "advertiser" | "admin";
+export type UserRole = "advertiser" | "admin";
 export type ListingStatus = "pending" | "active" | "rejected" | "suspended";
-export type SubscriptionTier = "free" | "basic" | "premium";
+export type SubscriptionTier = "free" | "premium";
 
 export interface Profile {
   id: string;
-  email: string;
   full_name: string | null;
-  phone: string | null;
+  whatsapp_number: string | null;
   role: UserRole;
   avatar_url: string | null;
   created_at: string;
@@ -21,15 +20,14 @@ export interface Category {
   slug: string;
   icon: string | null;
   description: string | null;
-  parent_id: string | null;
-  listing_count: number;
+  listings_count: number | null;
   created_at: string;
 }
 
 export interface Listing {
   id: string;
   owner_id: string;
-  category_id: string;
+  category_id: string | null;
   title: string;
   slug: string;
   description: string | null;
@@ -44,25 +42,24 @@ export interface Listing {
   latitude: number | null;
   longitude: number | null;
   logo_url: string | null;
-  cover_url: string | null;
+  cover_image_url: string | null;
+  business_card_image_url: string | null;
   business_card_url: string | null;
-  gallery: string[];
+  gallery_urls: string[] | null;
   business_hours: BusinessHours | null;
-  social_links: SocialLinks | null;
   status: ListingStatus;
   plan_tier: SubscriptionTier;
-  is_verified: boolean;
-  average_rating: number;
-  review_count: number;
-  view_count: number;
-  contact_count: number;
+  views_count: number | null;
+  clicks_whatsapp_count: number | null;
+  clicks_phone_count: number | null;
   seo_title: string | null;
   seo_description: string | null;
+  approved_at: string | null;
+  featured_until: string | null;
   created_at: string;
   updated_at: string;
-  // Joined data
-  category?: Category;
-  owner?: Profile;
+  category?: Category | null;
+  owner?: Profile | null;
 }
 
 export interface BusinessHours {
@@ -75,39 +72,30 @@ export interface BusinessHours {
   sunday?: { open: string; close: string } | null;
 }
 
-export interface SocialLinks {
-  facebook?: string | null;
-  instagram?: string | null;
-  twitter?: string | null;
-  linkedin?: string | null;
-  youtube?: string | null;
-}
-
 export interface Review {
   id: string;
   listing_id: string;
-  user_id: string;
+  user_id: string | null;
+  author_name: string | null;
   rating: number;
   comment: string | null;
-  is_verified: boolean;
+  is_verified: boolean | null;
+  status: "pending" | "approved" | "rejected";
   created_at: string;
-  updated_at: string;
-  // Joined data
-  user?: Profile;
+  user?: Profile | null;
 }
 
 export interface AnalyticsEvent {
   id: string;
   listing_id: string;
-  event_type: "view" | "whatsapp_click" | "phone_click" | "website_click" | "search_impression";
+  event_type: "view" | "whatsapp_click" | "phone_click" | "website_click";
   user_agent: string | null;
   ip_hash: string | null;
-  referrer: string | null;
   created_at: string;
 }
 
 export interface ListingWithDetails extends Listing {
-  category: Category;
+  category?: Category | null;
   reviews?: Review[];
 }
 
@@ -116,6 +104,4 @@ export interface SearchFilters {
   category?: string;
   city?: string;
   state?: string;
-  rating?: number;
-  verified?: boolean;
 }
