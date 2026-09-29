@@ -14,6 +14,7 @@ import { Footer } from "@/components/footer";
 import type { ListingWithDetails, Category } from "@/lib/types/database";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { getTrafficAttribution } from "@/lib/attribution/client";
 
 interface SearchResultsProps {
   listings: ListingWithDetails[];
@@ -48,6 +49,8 @@ export function SearchResults({
     if (trackedSearch.current === key) return;
     trackedSearch.current = key;
 
+    const attribution = getTrafficAttribution();
+
     void fetch("/api/search-event", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -58,6 +61,7 @@ export function SearchResults({
         categorySlug,
         resultCount: total,
         sourcePath: window.location.pathname + window.location.search,
+        attribution,
       }),
     }).catch(() => {
       // Telemetry must never block the search experience.

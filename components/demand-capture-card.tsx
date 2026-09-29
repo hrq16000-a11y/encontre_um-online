@@ -5,6 +5,7 @@ import { Loader2, MessageCircle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getTrafficAttribution } from "@/lib/attribution/client";
 
 interface DemandCaptureCardProps {
   query: string;
@@ -24,6 +25,7 @@ export function DemandCaptureCard({ query, city }: DemandCaptureCardProps) {
     setStatus(null);
 
     try {
+      const attribution = getTrafficAttribution();
       const response = await fetch("/api/demand", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,6 +36,7 @@ export function DemandCaptureCard({ query, city }: DemandCaptureCardProps) {
           whatsapp,
           company,
           sourcePath: window.location.pathname + window.location.search,
+          attribution,
         }),
       });
 

@@ -18,6 +18,9 @@ type SearchEvent = {
   city: string | null;
   category_slug: string | null;
   result_count: number;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
   created_at: string;
 };
 
@@ -28,6 +31,9 @@ type DemandRequest = {
   requester_name: string | null;
   whatsapp: string;
   status: string;
+  utm_source: string | null;
+  utm_medium: string | null;
+  utm_campaign: string | null;
   created_at: string;
 };
 
@@ -67,12 +73,12 @@ export default async function OpportunitiesPage() {
   const [{ data: demandRows }, { data: searchRows }] = await Promise.all([
     supabase
       .from("demand_requests")
-      .select("id, query, city, requester_name, whatsapp, status, created_at")
+      .select("id, query, city, requester_name, whatsapp, status, utm_source, utm_medium, utm_campaign, created_at")
       .order("created_at", { ascending: false })
       .limit(100),
     supabase
       .from("search_events")
-      .select("query, city, category_slug, result_count, created_at")
+      .select("query, city, category_slug, result_count, utm_source, utm_medium, utm_campaign, created_at")
       .order("created_at", { ascending: false })
       .limit(250),
   ]);
@@ -82,6 +88,7 @@ export default async function OpportunitiesPage() {
   const zeroResultSearches = searches.filter((row) => row.result_count === 0);
   const topQueries = topValues(searches, (row) => row.query);
   const topCities = topValues(searches, (row) => row.city);
+  const topSources = topValues(searches, (row) => row.utm_source || "direto/sem UTM");
   const newDemands = demands.filter((row) => row.status === "new");
 
   return (
@@ -125,7 +132,7 @@ export default async function OpportunitiesPage() {
           />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Card>
             <CardHeader>
               <CardTitle>Termos mais procurados</CardTitle>
@@ -146,6 +153,25 @@ export default async function OpportunitiesPage() {
             </CardContent>
           </Card>
 
+          <Card>
+            <CardHeader>
+              <CardTitle>Origem das buscas</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {topSources.length ? (
+                <div className="space-y-3">
+                  {topSources.map(([value, count]) => (
+                    <div key={value} className="flex items-center justify-between gap-3">
+                      <span className="truncate">{value}</span>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <EmptyState text="Ainda não há origem suficiente." />
+              )}
+            </CardContent>
+          </Card>
           <Card>
             <CardHeader>
               <CardTitle>Cidades com procura</CardTitle>
@@ -194,6 +220,7 @@ export default async function OpportunitiesPage() {
                         <p className="mt-1 text-sm text-muted-foreground">
                           {demand.city || "Local não informado"}
                           {demand.requester_name ? ` • ${demand.requester_name}` : ""}
+                          {demand.utm_source ? ` • origem: ${demand.utm_source}` : ""}
                           {" • "}
                           {new Date(demand.created_at).toLocaleString("pt-BR")}
                         </p>
