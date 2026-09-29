@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,30 @@ export function SearchResults({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
+  const trackedSearch = useRef("");
+
+  useEffect(() => {
+    if (currentPage !== 1 || (!query && !categorySlug && !city)) return;
+
+    const key = JSON.stringify([query, categorySlug, city, total]);
+    if (trackedSearch.current === key) return;
+    trackedSearch.current = key;
+
+    void fetch("/api/search-event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      keepalive: true,
+      body: JSON.stringify({
+        query,
+        city,
+        categorySlug,
+        resultCount: total,
+        sourcePath: window.location.pathname + window.location.search,
+      }),
+    }).catch(() => {
+      // Telemetry must never block the search experience.
+    });
+  }, [query, categorySlug, city, total, currentPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
