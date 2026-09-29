@@ -1,64 +1,59 @@
-"use client";
-
 import Link from "next/link";
-import { ArrowRight, Wrench, Zap, Droplet, Scale, Stethoscope, Calculator, HardHat, Paintbrush } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { createClient } from "@/lib/supabase/server";
 
-const categories = [
-  { name: "Mecanico", icon: Wrench, description: "Servicos automotivos e mecanicos", slug: "mecanico" },
-  { name: "Eletricista", icon: Zap, description: "Servicos eletricos residenciais e comerciais", slug: "eletricista" },
-  { name: "Encanador", icon: Droplet, description: "Servicos hidraulicos e encanamento", slug: "encanador" },
-  { name: "Advogado", icon: Scale, description: "Servicos juridicos e advocacia", slug: "advogado" },
-  { name: "Dentista", icon: Stethoscope, description: "Servicos odontologicos", slug: "dentista" },
-  { name: "Contador", icon: Calculator, description: "Servicos contabeis e financeiros", slug: "contador" },
-  { name: "Pedreiro", icon: HardHat, description: "Construcao e reformas", slug: "pedreiro" },
-  { name: "Pintor", icon: Paintbrush, description: "Servicos de pintura", slug: "pintor" },
-];
+export async function CategoriesSection() {
+  const supabase = await createClient();
+  const { data: categories } = await supabase
+    .from("categories")
+    .select("id, name, slug, icon, description, listings_count")
+    .order("listings_count", { ascending: false })
+    .order("name", { ascending: true })
+    .limit(8);
 
-export function CategoriesSection() {
+  if (!categories?.length) return null;
+
   return (
-    <section className="py-20 sm:py-28 px-4 sm:px-6 lg:px-8 bg-background">
-      <div className="max-w-6xl mx-auto">
-        {/* Section Header */}
-        <div className="flex items-center justify-between mb-12">
+    <section className="bg-background px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-12 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-2">
-              Categorias Populares
+            <h2 className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Explore categorias
             </h2>
             <p className="text-muted-foreground">
-              Encontre o profissional ideal para sua necessidade
+              Comece por uma categoria ou pesquise livremente pelo que precisa.
             </p>
           </div>
-          <Link href="/buscar" className="hidden sm:flex items-center gap-1 text-primary hover:underline font-medium">
+          <Link
+            href="/buscar"
+            className="hidden items-center gap-1 font-medium text-primary hover:underline sm:flex"
+          >
             Ver todas
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        {/* Categories Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-          {categories.map((category) => {
-            const Icon = category.icon;
-            return (
-              <Link key={category.slug} href={`/buscar?category=${category.slug}`}>
-                <Card className="p-6 h-full hover:border-primary/50 hover:shadow-lg transition-all duration-300 cursor-pointer group">
-                  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <Icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="font-semibold text-foreground mb-1 group-hover:text-primary transition-colors">
-                    {category.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-2">
-                    {category.description}
-                  </p>
-                </Card>
-              </Link>
-            );
-          })}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+          {categories.map((category) => (
+            <Link key={category.id} href={`/buscar?category=${category.slug}`}>
+              <Card className="group h-full cursor-pointer p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-lg">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl transition-colors group-hover:bg-primary/20">
+                  {category.icon || "🔎"}
+                </div>
+                <h3 className="mb-1 font-semibold text-foreground transition-colors group-hover:text-primary">
+                  {category.name}
+                </h3>
+                <p className="line-clamp-2 text-sm text-muted-foreground">
+                  {category.description || "Encontre opções nessa categoria."}
+                </p>
+              </Card>
+            </Link>
+          ))}
         </div>
 
-        {/* Mobile CTA */}
         <div className="mt-8 text-center sm:hidden">
           <Link href="/buscar">
             <Button variant="outline" className="rounded-xl bg-transparent">
