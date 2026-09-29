@@ -32,6 +32,7 @@ import {
   BarChart3,
   AlertCircle,
   TrendingUp,
+  Search,
   ChevronRight,
 } from "lucide-react";
 
@@ -45,6 +46,10 @@ interface AdminDashboardProps {
     totalReviews: number;
     weeklyViews: number;
     weeklyContacts: number;
+    weeklySearches: number;
+    weeklyZeroResultSearches: number;
+    weeklyLeads: number;
+    newLeads: number;
   };
   pendingListings: (ListingWithDetails & { owner?: Profile })[];
   recentListings: (ListingWithDetails & { owner?: Profile })[];
@@ -150,7 +155,7 @@ export function AdminDashboard({
         </div>
 
         {/* Stats */}
-        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           <Card>
             <CardContent className="flex items-center gap-4 p-6">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
@@ -176,6 +181,36 @@ export function AdminDashboard({
                 <p className="text-2xl font-bold">{stats.pendingListings}</p>
                 <p className="text-xs text-muted-foreground">
                   aguardando aprovação
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="flex items-center gap-4 p-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-violet-500/10">
+                <Search className="h-6 w-6 text-violet-500" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Buscas (7d)</p>
+                <p className="text-2xl font-bold">{stats.weeklySearches}</p>
+                <p className="text-xs text-muted-foreground">
+                  {stats.weeklyZeroResultSearches} sem resultado
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="flex items-center gap-4 p-6">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/10">
+                <MessageCircle className="h-6 w-6 text-emerald-500" />
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Leads (7d)</p>
+                <p className="text-2xl font-bold">{stats.weeklyLeads}</p>
+                <p className="text-xs text-muted-foreground">
+                  {stats.newLeads} aguardando ação
                 </p>
               </div>
             </CardContent>
