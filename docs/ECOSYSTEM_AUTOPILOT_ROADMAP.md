@@ -1,6 +1,6 @@
 # Ecosystem Autopilot — Roadmap
 
-Status: documentado para implementação posterior.
+Status: documentado para implementação posterior.\n\nIssue de referência: #6.
 
 ## Objetivo
 
