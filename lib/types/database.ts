@@ -18,10 +18,10 @@ export interface Category {
   id: string;
   name: string;
   slug: string;
-  icon: string | null;
-  description: string | null;
-  listings_count: number | null;
-  created_at: string;
+  icon?: string | null;
+  description?: string | null;
+  listings_count?: number | null;
+  created_at?: string;
 }
 
 export interface Listing {
