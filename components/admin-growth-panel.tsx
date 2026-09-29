@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MessageCircle, Search, Target } from "lucide-react";
+import { normalizeBrazilWhatsApp } from "@/lib/utils/phone";
 
 type Demand = {
   id: string;
@@ -139,7 +140,7 @@ export function AdminGrowthPanel() {
                       </div>
                       <div className="flex flex-wrap gap-2">
                         <a
-                          href={`https://wa.me/${item.whatsapp.replace(/\D/g, "")}`}
+                          href={`https://wa.me/${normalizeBrazilWhatsApp(item.whatsapp)}`}
                           target="_blank"
                           rel="noreferrer"
                         >
