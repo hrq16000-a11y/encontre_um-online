@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,15 +39,19 @@ export function SearchResults({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
+  const trackedSearch = useRef("");
 
   useEffect(() => {
     if (currentPage !== 1 || (!query && !categorySlug && !city)) return;
 
-    const controller = new AbortController();
+    const key = JSON.stringify([query, categorySlug, city, total]);
+    if (trackedSearch.current === key) return;
+    trackedSearch.current = key;
 
-    fetch("/api/search-event", {
+    void fetch("/api/search-event", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      keepalive: true,
       body: JSON.stringify({
         query,
         city,
@@ -55,13 +59,10 @@ export function SearchResults({
         resultCount: total,
         sourcePath: window.location.pathname + window.location.search,
       }),
-      signal: controller.signal,
     }).catch(() => {
-      // Analytics must never block the search experience.
+      // Telemetry must never block the search experience.
     });
-
-    return () => controller.abort();
-  }, [query, city, categorySlug, total, currentPage]);
+  }, [query, categorySlug, city, total, currentPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -262,7 +263,7 @@ export function SearchResults({
                 </div>
               )}
             </>
-          ) : query ? (
+          ) : hasFilters ? (
             <div className="space-y-8 py-12">
               <div className="text-center">
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
@@ -275,7 +276,15 @@ export function SearchResults({
                   Sua procura não precisa terminar aqui.
                 </p>
               </div>
-              <DemandCaptureCard query={query} city={city} />
+              <DemandCaptureCard
+                query={
+                  query ||
+                  categories.find((category) => category.slug === categorySlug)?.name ||
+                  categorySlug ||
+                  "Serviço ou negócio local"
+                }
+                city={city}
+              />
             </div>
           ) : (
             <div className="py-16 text-center">
