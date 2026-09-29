@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { MetadataRoute } from "next";
 
-const BASE_URL = "https://encontreum.online";
+const BASE_URL = "https://www.encontreum.online";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const supabase = await createClient();
