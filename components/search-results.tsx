@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,29 @@ export function SearchResults({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
+
+  useEffect(() => {
+    if (currentPage !== 1 || (!query && !categorySlug && !city)) return;
+
+    const controller = new AbortController();
+
+    fetch("/api/search-event", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        query,
+        city,
+        categorySlug,
+        resultCount: total,
+        sourcePath: window.location.pathname + window.location.search,
+      }),
+      signal: controller.signal,
+    }).catch(() => {
+      // Analytics must never block the search experience.
+    });
+
+    return () => controller.abort();
+  }, [query, city, categorySlug, total, currentPage]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
