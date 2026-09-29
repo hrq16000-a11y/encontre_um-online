@@ -37,6 +37,69 @@ type DemandRequest = {
   created_at: string;
 };
 
+type Opportunity = {
+  label: string;
+  city: string;
+  zeroResultSearches: number;
+  leads: number;
+  score: number;
+};
+
+function normalizeSignal(value: string | null | undefined) {
+  return (value || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim()
+    .toLowerCase();
+}
+
+function buildOpportunities(searches: SearchEvent[], demands: DemandRequest[]) {
+  const map = new Map<string, Opportunity>();
+
+  for (const row of searches) {
+    if (row.result_count !== 0) continue;
+    const label = row.query?.trim() || row.category_slug?.trim() || "";
+    if (!label) continue;
+
+    const city = row.city?.trim() || "";
+    const key = `${normalizeSignal(label)}|${normalizeSignal(city)}`;
+    const current = map.get(key) || {
+      label,
+      city,
+      zeroResultSearches: 0,
+      leads: 0,
+      score: 0,
+    };
+    current.zeroResultSearches += 1;
+    map.set(key, current);
+  }
+
+  for (const demand of demands) {
+    const label = demand.query.trim();
+    if (!label) continue;
+
+    const city = demand.city?.trim() || "";
+    const key = `${normalizeSignal(label)}|${normalizeSignal(city)}`;
+    const current = map.get(key) || {
+      label,
+      city,
+      zeroResultSearches: 0,
+      leads: 0,
+      score: 0,
+    };
+    current.leads += 1;
+    map.set(key, current);
+  }
+
+  return [...map.values()]
+    .map((item) => ({
+      ...item,
+      score: item.zeroResultSearches * 2 + item.leads * 5,
+    }))
+    .sort((a, b) => b.score - a.score || b.leads - a.leads)
+    .slice(0, 12);
+}
+
 function topValues(
   rows: SearchEvent[],
   getValue: (row: SearchEvent) => string | null,
@@ -90,6 +153,7 @@ export default async function OpportunitiesPage() {
   const topCities = topValues(searches, (row) => row.city);
   const topSources = topValues(searches, (row) => row.utm_source || "direto/sem UTM");
   const newDemands = demands.filter((row) => row.status === "new");
+  const opportunities = buildOpportunities(searches, demands);
 
   return (
     <main className="min-h-screen bg-muted/30 px-4 py-8">
@@ -131,6 +195,45 @@ export default async function OpportunitiesPage() {
             value={newDemands.length}
           />
         </div>
+
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle>Prioridades sugeridas pelos dados</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {opportunities.length ? (
+              <div className="grid gap-3 md:grid-cols-2">
+                {opportunities.map((item, index) => (
+                  <div
+                    key={`${item.label}-${item.city}-${index}`}
+                    className="flex items-center justify-between gap-4 rounded-lg border p-4"
+                  >
+                    <div className="min-w-0">
+                      <p className="truncate font-semibold">{item.label}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {item.city || "Local não informado"} • {item.zeroResultSearches} busca
+                        {item.zeroResultSearches === 1 ? "" : "s"} sem resultado • {item.leads} lead
+                        {item.leads === 1 ? "" : "s"}
+                      </p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="text-xs uppercase tracking-wide text-muted-foreground">
+                        score
+                      </p>
+                      <p className="text-2xl font-bold text-primary">{item.score}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <EmptyState text="Ainda não há sinais suficientes para priorização." />
+            )}
+            <p className="mt-4 text-xs text-muted-foreground">
+              Score determinístico: 2 pontos por busca sem resultado + 5 pontos por lead
+              com contato. Serve para ordenar ações; não representa receita prevista.
+            </p>
+          </CardContent>
+        </Card>
 
         <div className="grid gap-6 lg:grid-cols-3">
           <Card>
