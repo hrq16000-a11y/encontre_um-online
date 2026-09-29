@@ -1,12 +1,12 @@
 # Ecosystem Autopilot — visão oficial
 
-## Objetivo
+## Missão
 
-Criar posteriormente uma central autônoma de agentes que opere continuamente
-os portais do ecossistema, sem transformar cada site em uma ilha e sem depender
-de uma IA "pensando 24 horas".
+Criar uma central autônoma para operar continuamente o ecossistema de portais,
+reduzindo trabalho manual e aumentando tráfego, leads, receita e confiabilidade.
 
-O modelo é orientado a eventos e agenda:
+O Autopilot não mantém modelos de IA "pensando 24 horas". O desenho é orientado
+a eventos, agenda e condições:
 
 ```
 evento / horário / condição
@@ -22,19 +22,84 @@ ação segura
 validação / log / custo / resultado
 ```
 
-## Arquitetura-alvo
+## Control Tower
 
-- **Supervisor**: prioriza e distribui trabalho.
-- **Health Agent**: deploys, erros, 404, disponibilidade e regressões.
-- **SEO Agent**: GSC, sitemap, indexabilidade, demanda orgânica e oportunidades.
-- **Lead Agent**: qualifica e roteia demanda capturada.
-- **Growth Agent**: encontra cidades/categorias com demanda e pouca oferta.
-- **Content Agent**: cria propostas de conteúdo somente a partir de demanda e
-  evidência real.
-- **Monetization Agent**: identifica oportunidades de destaque, publicidade,
-  assinatura, lead pago, afiliado e serviços.
-- **Git Agent**: branch → mudança → testes → PR → validação.
-- **Auditor**: aplica gates de segurança, marca, custo, SEO e qualidade.
+Camada central de observabilidade e coordenação.
+
+Responsabilidades:
+- inventário de portais;
+- fila de jobs;
+- prioridade;
+- estado de cada agente;
+- custos;
+- resultados;
+- aprovações;
+- auditoria.
+
+## Agentes previstos
+
+### Supervisor
+Prioriza e distribui trabalho respeitando custo, risco, dependências e retorno.
+
+### Health Agent
+Verifica:
+- uptime;
+- erros 4xx/5xx;
+- runtime errors;
+- regressões de deploy;
+- sitemap;
+- robots;
+- canonical;
+- rotas críticas.
+
+### SEO Agent
+Analisa:
+- GSC;
+- cobertura;
+- páginas com potencial;
+- páginas fracas;
+- sitemap;
+- canonical;
+- demanda orgânica;
+- oportunidades de conteúdo.
+
+### Lead Agent
+Analisa:
+- novas demandas;
+- leads não atendidos;
+- região;
+- categoria;
+- urgência;
+- potencial de roteamento.
+
+### Growth Agent
+Cruza buscas, demanda, oferta, cidade, categoria e conversão para produzir:
+- prioridades de expansão;
+- novas categorias;
+- novas cidades;
+- lacunas de oferta;
+- oportunidades comerciais.
+
+### Monetization Agent
+Procura oportunidades de:
+- destaque pago;
+- assinatura;
+- lead pago;
+- publicidade;
+- afiliados;
+- venda de landing/site/serviços;
+- patrocínios.
+
+### Content Agent
+Cria ou propõe conteúdo somente quando existir justificativa por demanda,
+dados ou oportunidade real.
+
+### Git Agent
+Pode abrir issue, criar branch, alterar código, rodar CI, abrir PR e corrigir
+falhas.
+
+### Auditor
+Aplica gates de segurança, marca, custo, SEO, qualidade e irreversibilidade.
 
 ## Níveis de autonomia
 
@@ -43,17 +108,15 @@ Pode executar sem aprovação:
 - monitoramento;
 - classificação;
 - métricas;
-- criação de relatórios;
+- relatórios;
 - health checks;
 - detecção de oportunidades;
-- abertura de issues.
+- abertura de issues;
+- coleta de dados.
 
 ### AUTO + PR
-Pode alterar código, mas entrega via:
-- branch;
-- build/testes;
-- PR;
-- validação de preview/deploy.
+Pode alterar código, sempre por:
+branch → mudança → testes → PR → validação.
 
 ### APPROVAL REQUIRED
 Exige ação/aprovação humana:
@@ -61,8 +124,40 @@ Exige ação/aprovação humana:
 - exclusão ou migração destrutiva;
 - alteração de domínio/DNS;
 - mudanças comerciais irreversíveis;
-- acesso a segredos;
+- acesso ou alteração de segredos;
 - ações que possam afetar outra marca do ecossistema.
+
+## Estado e fila
+
+Tabelas centrais futuras:
+- `agent_jobs`
+- `agent_runs`
+- `agent_events`
+- `agent_costs`
+- `agent_approvals`
+- `portal_registry`
+
+`agent_jobs` deve registrar no mínimo:
+- id
+- portal
+- agent
+- task_type
+- payload
+- priority
+- status
+- risk_level
+- approval_required
+- scheduled_for
+- started_at
+- finished_at
+- attempts
+- max_attempts
+- cost_estimate
+- actual_cost
+- result
+- error
+- created_at
+- updated_at
 
 ## Infraestrutura preferida
 
@@ -73,29 +168,65 @@ Exige ação/aprovação humana:
 - Eventos/webhooks > polling contínuo.
 - Jobs curtos e retomáveis > agente permanente consumindo tokens.
 
-## Tabelas centrais futuras
+## Princípios econômicos
 
-- `agent_jobs`
-- `agent_runs`
-- `agent_events`
-- `agent_costs`
-- `agent_approvals`
-- `portal_registry`
-
-Cada execução deve registrar:
-`portal`, `agent`, `task`, `status`, `priority`, `trigger`,
-`started_at`, `finished_at`, `cost`, `result`, `needs_approval`.
+1. Código determinístico antes de IA quando entregar resultado equivalente.
+2. Modelo barato por padrão.
+3. Limites de saída e custo por job.
+4. Cache quando possível.
+5. Ferramentas desativadas por padrão.
+6. Modelo mais forte somente quando necessário.
+7. Cada agente deve provar utilidade em receita, economia de tempo, mitigação de risco ou aquisição.
 
 ## Estratégia de implantação
 
-1. Usar **EncontreUm.online como laboratório**.
-2. Começar por Health + Leads + SEO + Growth.
-3. Medir confiabilidade e custo.
-4. Extrair o motor para uma central independente.
-5. Conectar os demais portais preservando identidade e dados de cada marca.
+### Fase 1 — laboratório no EncontreUm.online
+- Health;
+- Leads;
+- SEO;
+- Growth;
+- captura de busca;
+- inteligência de demanda;
+- painel;
+- jobs simples.
+
+### Fase 2 — extração
+Mover o motor para serviço central independente.
+
+### Fase 3 — ecossistema
+Conectar os demais portais preservando identidade e dados de cada marca.
+
+## Regra de isolamento
+
+Infraestrutura pode ser compartilhada.
+
+Não compartilhar automaticamente:
+- identidade;
+- conteúdo;
+- SEO;
+- banco comercial;
+- claims;
+- posicionamento;
+- configuração de monetização.
+
+Cada marca continua autônoma externamente.
 
 ## Regra permanente
 
-Agentes não existem para "ficar ocupados". Só acordam quando houver um evento,
-agenda ou condição que justifique trabalho. O sucesso é medido por receita,
-leads, tráfego qualificado, economia operacional e redução de erros.
+Agentes não existem para "ficar ocupados". Só acordam quando houver evento,
+agenda ou condição que justifique trabalho.
+
+Sucesso é medido por:
+- receita;
+- leads;
+- tráfego qualificado;
+- economia operacional;
+- redução de erros;
+- velocidade de execução.
+
+## Resultado esperado
+
+Muitos portais independentes → muitos pontos de aquisição → central de intenção
+→ rede de prestadores/negócios → monetização → dados → nova expansão.
+
+Este documento é a referência oficial para implementação futura do Ecosystem Autopilot.
