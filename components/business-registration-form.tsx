@@ -158,6 +158,17 @@ export function BusinessRegistrationForm({
     const file = e.target.files?.[0];
     if (!file) return;
 
+    const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
+    if (!allowedTypes.has(file.type)) {
+      setError("Use uma imagem JPG, PNG ou WebP.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("A imagem deve ter no máximo 5 MB.");
+      return;
+    }
+
     // Show preview
     const reader = new FileReader();
     reader.onload = (e) => {
