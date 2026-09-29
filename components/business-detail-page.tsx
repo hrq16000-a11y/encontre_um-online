@@ -46,9 +46,9 @@ interface Listing {
   gallery_urls?: string[] | null;
   business_hours?: Record<string, { open: string; close: string }> | null;
   plan_tier: string;
-  views_count: number;
-  clicks_whatsapp_count: number;
-  clicks_phone_count: number;
+  views_count: number | null;
+  clicks_whatsapp_count: number | null;
+  clicks_phone_count: number | null;
   category?: {
     id: string;
     name: string;
