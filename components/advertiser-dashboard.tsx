@@ -27,7 +27,6 @@ import {
   Trash2,
   BarChart3,
   Building2,
-  Star,
   TrendingUp,
   LogOut,
   Settings,
@@ -284,18 +283,11 @@ export function AdvertiserDashboard({
                           <div className="mt-2 flex items-center gap-4 text-sm">
                             <div className="flex items-center gap-1 text-muted-foreground">
                               <Eye className="h-4 w-4" />
-                              {listing.view_count} views
+                              {listing.views_count} views
                             </div>
                             <div className="flex items-center gap-1 text-muted-foreground">
                               <MessageCircle className="h-4 w-4" />
-                              {listing.contact_count} contatos
-                            </div>
-                            <div className="flex items-center gap-1 text-muted-foreground">
-                              <Star className="h-4 w-4" />
-                              {listing.average_rating > 0
-                                ? listing.average_rating.toFixed(1)
-                                : "—"}{" "}
-                              ({listing.review_count})
+                              {((listing.clicks_whatsapp_count || 0) + (listing.clicks_phone_count || 0))} contatos
                             </div>
                           </div>
                         )}
@@ -382,7 +374,7 @@ export function AdvertiserDashboard({
                             Visualizações
                           </p>
                           <p className="text-xl font-semibold">
-                            {listing.view_count}
+                            {listing.views_count}
                           </p>
                         </div>
                         <div>
@@ -390,7 +382,7 @@ export function AdvertiserDashboard({
                             Contatos
                           </p>
                           <p className="text-xl font-semibold">
-                            {listing.contact_count}
+                            {((listing.clicks_whatsapp_count || 0) + (listing.clicks_phone_count || 0))}
                           </p>
                         </div>
                         <div>
