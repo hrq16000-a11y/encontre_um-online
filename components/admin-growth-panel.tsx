@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { MessageCircle, Search, Target, Zero } from "lucide-react";
+import { MessageCircle, Search, Target } from "lucide-react";
 
 type Demand = {
   id: string;
@@ -183,7 +183,7 @@ export function AdminGrowthPanel() {
                   {gaps.map(([label, count]) => (
                     <div key={label} className="flex items-center justify-between rounded-lg border p-3">
                       <div className="flex items-center gap-2">
-                        <Zero className="h-4 w-4 text-muted-foreground" />
+                        <Search className="h-4 w-4 text-muted-foreground" />
                         <span>{label}</span>
                       </div>
                       <Badge variant="outline">{count} busca{count > 1 ? "s" : ""}</Badge>
