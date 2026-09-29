@@ -1,146 +1,83 @@
 "use client";
 
 import { useState } from "react";
-import { Search, MapPin, Users, Grid3X3, Building2, Star } from "lucide-react";
+import Link from "next/link";
+import { Search, MapPin, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
 
-const professions = [
-  "Mecanico",
-  "Eletricista",
-  "Encanador",
-  "Advogado",
-  "Dentista",
-  "Contador",
-  "Pedreiro",
-  "Pintor",
-  "Engenheiro Civil",
-  "Construcao",
-];
-
-const cities = [
-  "Sao Paulo,SP",
-  "Rio de Janeiro,RJ",
-  "Curitiba,PR",
-  "Belo Horizonte,MG",
-  "Porto Alegre,RS",
-  "Salvador,BA",
-  "Brasilia,DF",
-  "Fortaleza,CE",
-  "Recife,PE",
-  "Manaus,AM",
-  "Fazenda Rio Grande,PR",
-  "Araucaria,PR",
-  "Sao Jose dos Pinhais,PR",
-];
-
-const stats = [
-  { icon: Users, value: "500+", label: "Profissionais Ativos" },
-  { icon: Grid3X3, value: "10", label: "Categorias" },
-  { icon: Building2, value: "13", label: "Cidades" },
-  { icon: Star, value: "4.8", label: "Avaliacao Media" },
-];
-
 export function HeroSection() {
-  const [profession, setProfession] = useState("");
+  const [query, setQuery] = useState("");
   const [city, setCity] = useState("");
   const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSearch = (event: React.FormEvent) => {
+    event.preventDefault();
+
     const params = new URLSearchParams();
-    if (profession) params.set("q", profession);
-    if (city) params.set("cidade", city.split(",")[0]);
-    router.push(`/buscar?${params.toString()}`);
+    if (query.trim()) params.set("q", query.trim());
+    if (city.trim()) params.set("city", city.trim());
+
+    router.push(params.size ? `/buscar?${params.toString()}` : "/buscar");
   };
 
   return (
-    <section className="relative min-h-[85vh] flex flex-col items-center justify-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background">
-      {/* Background Pattern */}
+    <section className="relative overflow-hidden bg-gradient-to-b from-primary/5 via-background to-background px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary),0.1),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(var(--accent),0.05),transparent_50%)]" />
-
-      <div className="relative z-10 w-full max-w-4xl mx-auto text-center">
-        {/* Logo/Brand */}
-        <div className="mb-6">
-          <span className="inline-block px-4 py-1.5 bg-primary/10 rounded-full text-sm font-medium text-primary">
-            EncontreUm
+      <div className="relative z-10 mx-auto max-w-5xl">
+        <div className="mx-auto max-w-3xl text-center">
+          <span className="mb-6 inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            Encontre Um
           </span>
+
+          <h1 className="mb-6 text-balance text-4xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl">
+            O que você precisa
+            <span className="text-primary"> encontrar hoje?</span>
+          </h1>
+
+          <p className="mx-auto mb-10 max-w-2xl text-balance text-lg text-muted-foreground sm:text-xl">
+            Pesquise por um serviço, profissional, comércio ou solução e informe
+            onde você precisa de atendimento.
+          </p>
         </div>
 
-        {/* Main Headline */}
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight text-foreground mb-6 text-balance">
-          Encontre Um
-          <br />
-          <span className="text-primary">Profissional Ideal</span>
-        </h1>
+        <form onSubmit={handleSearch} className="mx-auto w-full max-w-4xl">
+          <div className="grid gap-3 rounded-2xl border border-border bg-card p-3 shadow-lg sm:grid-cols-[1.4fr_1fr_auto]">
+            <label className="relative">
+              <span className="sr-only">O que você procura?</span>
+              <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Ex.: eletricista, informática, manicure..."
+                className="h-12 border-0 bg-secondary/50 pl-10 text-base shadow-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+            </label>
 
-        {/* Subheadline */}
-        <p className="text-lg sm:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto text-balance">
-          O maior diretorio de profissionais e servicos do Brasil. Conectamos voce aos melhores profissionais da sua cidade.
-        </p>
-
-        {/* Search Form */}
-        <form onSubmit={handleSearch} className="w-full max-w-3xl mx-auto">
-          <div className="flex flex-col sm:flex-row gap-3 p-3 bg-card border border-border rounded-2xl shadow-lg">
-            {/* Profession Select */}
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <select
-                value={profession}
-                onChange={(e) => setProfession(e.target.value)}
-                className="w-full h-12 pl-10 pr-4 bg-secondary/50 border-0 rounded-xl text-foreground focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-              >
-                <option value="">O que voce procura?</option>
-                {professions.map((p) => (
-                  <option key={p} value={p}>{p}</option>
-                ))}
-              </select>
-            </div>
-
-            {/* City Select */}
-            <div className="relative flex-1">
-              <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-              <select
+            <label className="relative">
+              <span className="sr-only">Cidade ou bairro</span>
+              <MapPin className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-muted-foreground" />
+              <Input
                 value={city}
-                onChange={(e) => setCity(e.target.value)}
-                className="w-full h-12 pl-10 pr-4 bg-secondary/50 border-0 rounded-xl text-foreground focus:ring-2 focus:ring-primary appearance-none cursor-pointer"
-              >
-                <option value="">Onde?</option>
-                {cities.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-            </div>
+                onChange={(event) => setCity(event.target.value)}
+                placeholder="Cidade ou bairro"
+                className="h-12 border-0 bg-secondary/50 pl-10 text-base shadow-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+            </label>
 
-            {/* Search Button */}
-            <Button type="submit" size="lg" className="h-12 px-8 rounded-xl font-semibold">
-              <Search className="mr-2 h-4 w-4" />
+            <Button type="submit" size="lg" className="h-12 rounded-xl px-8 font-semibold">
               Buscar
+              <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
         </form>
 
-        {/* Trust Indicator */}
-        <p className="mt-8 text-sm text-muted-foreground">
-          Mais de <span className="font-semibold text-foreground">8+ profissionais</span> cadastrados em{" "}
-          <span className="font-semibold text-foreground">13 cidades</span>
-        </p>
-
-        {/* Stats Grid */}
-        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 rounded-xl mb-3">
-                  <Icon className="h-6 w-6 text-primary" />
-                </div>
-                <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-              </div>
-            );
-          })}
+        <div className="mt-6 flex flex-col items-center justify-center gap-2 text-center text-sm text-muted-foreground sm:flex-row">
+          <span>Tem um negócio ou presta serviços?</span>
+          <Link href="/cadastrar" className="font-semibold text-primary hover:underline">
+            Cadastre-se para ser encontrado
+          </Link>
         </div>
       </div>
     </section>
