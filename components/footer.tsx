@@ -2,6 +2,8 @@ import Link from "next/link";
 
 const footerLinks = {
   navegar: [
+    { label: "Como funciona", href: "/como-funciona" },
+    { label: "Para profissionais", href: "/para-profissionais" },
     { label: "Buscar", href: "/buscar" },
     { label: "Cadastrar negócio", href: "/cadastrar" },
     { label: "Entrar", href: "/auth/login" },
