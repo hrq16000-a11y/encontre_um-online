@@ -5,7 +5,7 @@ import { Metadata } from "next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Search, MapPin, MessageCircle, TrendingUp } from "lucide-react";
+import { ArrowLeft, Download, Search, MapPin, MessageCircle, TrendingUp } from "lucide-react";
 import { DemandStatusActions } from "@/components/demand-status-actions";
 
 export const metadata: Metadata = {
@@ -165,12 +165,20 @@ export default async function OpportunitiesPage() {
               Sinais reais de procura para decidir onde cadastrar oferta, criar páginas e monetizar.
             </p>
           </div>
-          <Link href="/admin">
-            <Button variant="outline" className="gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Voltar ao admin
-            </Button>
-          </Link>
+          <div className="flex flex-wrap gap-2">
+            <a href="/api/admin/opportunities.csv">
+              <Button variant="outline" className="gap-2">
+                <Download className="h-4 w-4" />
+                Exportar leads CSV
+              </Button>
+            </a>
+            <Link href="/admin">
+              <Button variant="outline" className="gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Voltar ao admin
+              </Button>
+            </Link>
+          </div>
         </div>
 
         <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
