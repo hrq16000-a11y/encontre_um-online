@@ -40,7 +40,7 @@ Se uma funcionalidade não contribui para nenhum desses objetivos, sua prioridad
 - Não afirmar liderança nacional sem evidência.
 - Não publicar páginas programáticas vazias ou quase duplicadas só para indexar.
 - Cada página indexável precisa entregar informação real e útil.
-- Canonical de produção: https://encontreum.online.
+- Canonical de produção: https://www.encontreum.online.
 - Sitemap, robots e metadados devem usar o domínio canônico.
 - Dados estruturados devem refletir somente entidades e fatos reais.
 
