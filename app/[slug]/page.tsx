@@ -68,7 +68,7 @@ export async function generateMetadata({
       description,
     },
     alternates: {
-      canonical: `https://encontreum.online/${slug}`,
+      canonical: `https://www.encontreum.online/${slug}`,
     },
   };
 }
@@ -110,7 +110,7 @@ function generateJsonLd(listing: {
           addressCountry: "BR",
         }
       : undefined,
-    url: `https://encontreum.online/${listing.slug}`,
+    url: `https://www.encontreum.online/${listing.slug}`,
   };
 }
 
