@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { SearchResults } from "@/components/search-results";
+import { buildListingOrFilter, matchingCategoryIds, sanitizeSearchTerm, sanitizeSlug } from "@/lib/search/query";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -15,9 +16,9 @@ export async function generateMetadata({
   searchParams,
 }: SearchPageProps): Promise<Metadata> {
   const params = await searchParams;
-  const query = params.q || "";
-  const category = params.category || "";
-  const city = params.city || "";
+  const query = sanitizeSearchTerm(params.q, 80);
+  const category = sanitizeSlug(params.category, 120);
+  const city = sanitizeSearchTerm(params.city, 80);
 
   let title = "Buscar serviços, profissionais e negócios";
   if (query) title = `Resultados para "${query}"`;
@@ -36,9 +37,9 @@ export async function generateMetadata({
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
-  const query = params.q?.trim() || "";
-  const categorySlug = params.category?.trim() || "";
-  const city = params.city?.trim() || "";
+  const query = sanitizeSearchTerm(params.q, 120);
+  const categorySlug = sanitizeSlug(params.category, 120);
+  const city = sanitizeSearchTerm(params.city, 120);
   const page = Math.max(1, Number.parseInt(params.page || "1", 10) || 1);
   const limit = 12;
 
@@ -64,8 +65,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     .range((page - 1) * limit, page * limit - 1);
 
   if (query) {
+    const categoryIds = categorySlug
+      ? []
+      : matchingCategoryIds(categories || [], query);
+
     listingsQuery = listingsQuery.or(
-      `title.ilike.%${query}%,description.ilike.%${query}%`,
+      buildListingOrFilter(query, categoryIds),
     );
   }
 

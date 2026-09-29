@@ -1,11 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
+import { buildListingOrFilter, matchingCategoryIds, sanitizeSearchTerm, sanitizeSlug } from "@/lib/search/query";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const query = (searchParams.get("q") || "").trim().slice(0, 160);
-  const category = (searchParams.get("category") || "").trim().slice(0, 120);
-  const city = (searchParams.get("city") || "").trim().slice(0, 120);
+  const query = sanitizeSearchTerm(searchParams.get("q"), 120);
+  const category = sanitizeSlug(searchParams.get("category"), 120);
+  const city = sanitizeSearchTerm(searchParams.get("city"), 120);
   const page = Math.max(1, Number.parseInt(searchParams.get("page") || "1", 10) || 1);
   const limit = Math.min(
     24,
@@ -30,8 +31,16 @@ export async function GET(request: NextRequest) {
     .range(offset, offset + limit - 1);
 
   if (query) {
+    const { data: categories } = await supabase
+      .from("categories")
+      .select("id, name, slug");
+
+    const categoryIds = category
+      ? []
+      : matchingCategoryIds(categories || [], query);
+
     queryBuilder = queryBuilder.or(
-      `title.ilike.%${query}%,description.ilike.%${query}%`,
+      buildListingOrFilter(query, categoryIds),
     );
   }
 
