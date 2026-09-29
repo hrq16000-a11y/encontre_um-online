@@ -26,6 +26,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { normalizeBrazilWhatsApp } from "@/lib/utils/phone";
 
 interface Listing {
   id: string;
@@ -34,10 +35,8 @@ interface Listing {
   description?: string | null;
   phone_whatsapp?: string | null;
   phone_primary?: string | null;
-  whatsapp_business?: string | null;
   email?: string | null;
   website?: string | null;
-  address?: string | null;
   address_full?: string | null;
   city?: string | null;
   state?: string | null;
@@ -47,9 +46,9 @@ interface Listing {
   gallery_urls?: string[] | null;
   business_hours?: Record<string, { open: string; close: string }> | null;
   plan_tier: string;
-  views_count: number;
-  clicks_whatsapp_count: number;
-  clicks_phone_count: number;
+  views_count: number | null;
+  clicks_whatsapp_count: number | null;
+  clicks_phone_count: number | null;
   category?: {
     id: string;
     name: string;
@@ -63,11 +62,7 @@ interface Review {
   rating: number;
   comment?: string | null;
   created_at: string;
-  user?: {
-    id: string;
-    full_name?: string | null;
-    avatar_url?: string | null;
-  } | null;
+  author_name?: string | null;
 }
 
 interface BusinessDetailPageProps {
@@ -89,9 +84,9 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
   const [isSharing, setIsSharing] = useState(false);
   const supabase = createClient();
 
-  const whatsappNumber = listing.phone_whatsapp || listing.whatsapp_business;
+  const whatsappNumber = listing.phone_whatsapp;
   const phoneNumber = listing.phone_primary;
-  const address = listing.address_full || listing.address;
+  const address = listing.address_full;
 
   const logClick = async (type: "whatsapp_click" | "phone_click" | "website_click") => {
     await supabase.from("analytics_events").insert({
@@ -99,18 +94,15 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
       event_type: type,
     });
 
-    if (type === "whatsapp_click") {
-      await supabase.rpc("increment_whatsapp_clicks", { listing_uuid: listing.id });
-    }
   };
 
   const handleWhatsAppClick = () => {
     if (whatsappNumber) {
-      const phone = whatsappNumber.replace(/\D/g, "");
+      const phone = normalizeBrazilWhatsApp(whatsappNumber);
       const message = encodeURIComponent(
         `Olá! Vi seu perfil no Encontre Um e gostaria de mais informações.`
       );
-      window.open(`https://wa.me/55${phone}?text=${message}`, "_blank");
+      window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
       logClick("whatsapp_click");
     }
   };
@@ -363,15 +355,14 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
                         <div key={review.id}>
                           <div className="flex items-start gap-3">
                             <Avatar>
-                              <AvatarImage src={review.user?.avatar_url || ""} />
                               <AvatarFallback>
-                                {review.user?.full_name?.charAt(0) || "U"}
+                                {review.author_name?.charAt(0)?.toUpperCase() || "U"}
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex-1">
                               <div className="flex items-center justify-between">
                                 <span className="font-medium">
-                                  {review.user?.full_name || "Usuário"}
+                                  {review.author_name || "Usuário"}
                                 </span>
                                 <span className="text-sm text-muted-foreground">
                                   {new Date(review.created_at).toLocaleDateString("pt-BR")}
@@ -503,13 +494,13 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
                 <CardContent className="grid grid-cols-2 gap-4 p-4 text-center">
                   <div>
                     <p className="text-2xl font-bold text-primary">
-                      {listing.views_count.toLocaleString()}
+                      {(listing.views_count || 0).toLocaleString()}
                     </p>
                     <p className="text-sm text-muted-foreground">Visualizações</p>
                   </div>
                   <div>
                     <p className="text-2xl font-bold text-[#25D366]">
-                      {listing.clicks_whatsapp_count.toLocaleString()}
+                      {(listing.clicks_whatsapp_count || 0).toLocaleString()}
                     </p>
                     <p className="text-sm text-muted-foreground">Cliques WhatsApp</p>
                   </div>
