@@ -72,11 +72,11 @@ export default function SignUpPage() {
   };
 
   const benefits = [
-    "Cadastre seu negócio em 30 segundos",
-    "Apareça nas buscas do Google",
-    "Receba contatos diretos pelo WhatsApp",
-    "Painel completo de estatísticas",
-    "Grátis para sempre no plano básico",
+    "Crie o perfil do seu negócio",
+    "Tenha uma página pública quando o cadastro for aprovado",
+    "Receba contatos diretos pelo WhatsApp quando houver interessados",
+    "Acompanhe visualizações e contatos no painel",
+    "Cadastro inicial gratuito",
   ];
 
   return (
@@ -93,8 +93,7 @@ export default function SignUpPage() {
             Coloque seu negócio no mapa
           </h1>
           <p className="mb-8 text-lg text-muted-foreground">
-            Milhares de pessoas buscam serviços como o seu todos os dias. Esteja
-            onde seus clientes estão.
+            Cadastre sua atividade para poder ser encontrada por pessoas que procuram serviços e negócios na sua região.
           </p>
           <ul className="space-y-4">
             {benefits.map((benefit, index) => (
@@ -121,7 +120,7 @@ export default function SignUpPage() {
               Cadastre seu Negócio
             </CardTitle>
             <CardDescription>
-              Crie sua conta grátis e comece a receber clientes hoje
+              Crie sua conta e envie seu negócio para análise
             </CardDescription>
           </CardHeader>
           <CardContent>

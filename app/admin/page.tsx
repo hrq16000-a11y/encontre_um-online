@@ -56,7 +56,7 @@ export default async function AdminPage() {
     .select(`
       *,
       category:categories(id, name, slug, icon),
-      owner:profiles(id, full_name, email)
+      owner:profiles(id, full_name, avatar_url)
     `)
     .eq("status", "pending")
     .order("created_at", { ascending: true })
@@ -68,7 +68,7 @@ export default async function AdminPage() {
     .select(`
       *,
       category:categories(id, name, slug, icon),
-      owner:profiles(id, full_name, email)
+      owner:profiles(id, full_name, avatar_url)
     `)
     .order("created_at", { ascending: false })
     .limit(10);

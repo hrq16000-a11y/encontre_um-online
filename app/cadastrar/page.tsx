@@ -20,7 +20,6 @@ export default async function RegisterBusinessPage() {
   const { data: categories } = await supabase
     .from("categories")
     .select("*")
-    .is("parent_id", null)
     .order("name");
 
   return (

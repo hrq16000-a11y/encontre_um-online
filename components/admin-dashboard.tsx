@@ -314,9 +314,6 @@ export function AdminDashboard({
                                 <p className="font-medium">
                                   {listing.owner?.full_name || "Usuário"}
                                 </p>
-                                <p className="text-muted-foreground">
-                                  {listing.owner?.email}
-                                </p>
                               </div>
                             </div>
                           </div>
@@ -408,11 +405,11 @@ export function AdminDashboard({
                         </Badge>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Eye className="h-4 w-4" />
-                          {listing.view_count}
+                          {listing.views_count}
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <MessageCircle className="h-4 w-4" />
-                          {listing.contact_count}
+                          {((listing.clicks_whatsapp_count || 0) + (listing.clicks_phone_count || 0))}
                         </div>
                         {listing.status === "active" && (
                           <Link href={`/${listing.slug}`}>

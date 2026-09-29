@@ -3,11 +3,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const query = searchParams.get("q") || "";
-  const category = searchParams.get("category") || "";
-  const city = searchParams.get("city") || "";
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "12");
+  const query = (searchParams.get("q") || "").trim().slice(0, 160);
+  const category = (searchParams.get("category") || "").trim().slice(0, 120);
+  const city = (searchParams.get("city") || "").trim().slice(0, 120);
+  const page = Math.max(1, Number.parseInt(searchParams.get("page") || "1", 10) || 1);
+  const limit = Math.min(
+    24,
+    Math.max(1, Number.parseInt(searchParams.get("limit") || "12", 10) || 12),
+  );
   const offset = (page - 1) * limit;
 
   const supabase = await createClient();
@@ -19,17 +22,16 @@ export async function GET(request: NextRequest) {
       *,
       category:categories(id, name, slug, icon)
     `,
-      { count: "exact" }
+      { count: "exact" },
     )
     .eq("status", "active")
     .order("plan_tier", { ascending: false })
-    .order("average_rating", { ascending: false })
-    .order("review_count", { ascending: false })
+    .order("updated_at", { ascending: false })
     .range(offset, offset + limit - 1);
 
   if (query) {
     queryBuilder = queryBuilder.or(
-      `title.ilike.%${query}%,description.ilike.%${query}%`
+      `title.ilike.%${query}%,description.ilike.%${query}%`,
     );
   }
 
@@ -38,7 +40,7 @@ export async function GET(request: NextRequest) {
       .from("categories")
       .select("id")
       .eq("slug", category)
-      .single();
+      .maybeSingle();
 
     if (categoryData) {
       queryBuilder = queryBuilder.eq("category_id", categoryData.id);
@@ -52,7 +54,8 @@ export async function GET(request: NextRequest) {
   const { data: listings, error, count } = await queryBuilder;
 
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    console.error("[search] query_failed", { code: error.code });
+    return NextResponse.json({ error: "Falha ao buscar opções." }, { status: 500 });
   }
 
   return NextResponse.json({
