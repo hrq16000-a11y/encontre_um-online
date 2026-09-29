@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/admin", "/painel", "/auth/", "/api/", "/setup"],
       },
     ],
-    sitemap: "https://encontreum.com.br/sitemap.xml",
+    sitemap: "https://encontreum.online/sitemap.xml",
   };
 }
