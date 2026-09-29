@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { normalizeAttribution } from "@/lib/attribution/server";
 
 function normalizeText(value: unknown, maxLength: number) {
   if (typeof value !== "string") return "";
@@ -24,6 +25,7 @@ export async function POST(request: NextRequest) {
   const city = normalizeText(body.city, 120);
   const requesterName = normalizeText(body.requesterName, 100);
   const whatsapp = normalizeText(body.whatsapp, 40);
+  const attribution = normalizeAttribution(body.attribution);
 
   if (query.length < 2 || whatsapp.replace(/\D/g, "").length < 10) {
     return NextResponse.json(
@@ -41,6 +43,10 @@ export async function POST(request: NextRequest) {
     source_path: normalizeText(body.sourcePath, 200) || "/buscar",
     referrer: normalizeText(request.headers.get("referer"), 500) || null,
     user_agent: normalizeText(request.headers.get("user-agent"), 500) || null,
+    utm_source: attribution.utm_source,
+    utm_medium: attribution.utm_medium,
+    utm_campaign: attribution.utm_campaign,
+    landing_path: attribution.landing_path,
   });
 
   if (error) {
