@@ -25,8 +25,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
 import { normalizeBrazilWhatsApp } from "@/lib/utils/phone";
+import { trackListingContact } from "@/lib/analytics/client";
 
 interface Listing {
   id: string;
@@ -82,19 +82,9 @@ const dayNames: Record<string, string> = {
 
 export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps) {
   const [isSharing, setIsSharing] = useState(false);
-  const supabase = createClient();
-
   const whatsappNumber = listing.phone_whatsapp;
   const phoneNumber = listing.phone_primary;
   const address = listing.address_full;
-
-  const logClick = async (type: "whatsapp_click" | "phone_click" | "website_click") => {
-    await supabase.from("analytics_events").insert({
-      listing_id: listing.id,
-      event_type: type,
-    });
-
-  };
 
   const handleWhatsAppClick = () => {
     if (whatsappNumber) {
@@ -103,21 +93,21 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
         `Olá! Vi seu perfil no Encontre Um e gostaria de mais informações.`
       );
       window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
-      logClick("whatsapp_click");
+      trackListingContact(listing.id, "whatsapp_click");
     }
   };
 
   const handlePhoneClick = () => {
     if (phoneNumber) {
       window.location.href = `tel:${phoneNumber}`;
-      logClick("phone_click");
+      trackListingContact(listing.id, "phone_click");
     }
   };
 
   const handleWebsiteClick = () => {
     if (listing.website) {
       window.open(listing.website, "_blank");
-      logClick("website_click");
+      trackListingContact(listing.id, "website_click");
     }
   };
 
