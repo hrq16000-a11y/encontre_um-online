@@ -37,5 +37,8 @@ jobs:
       - name: Brand/domain gate
         run: node scripts/check-brand-domain.mjs
 
+      - name: Internal link gate
+        run: node scripts/check-internal-links.mjs
+
       - name: Build
         run: pnpm build
