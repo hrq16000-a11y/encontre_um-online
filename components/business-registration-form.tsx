@@ -803,17 +803,18 @@ export function BusinessRegistrationForm({
                     onClick={() => {
                       setStep("upload");
                       setFormData({
-                        name: "",
+                        title: "",
+                        slug: "",
                         category_id: "",
                         description: "",
-                        phone: "",
-                        whatsapp: "",
+                        phone_primary: "",
+                        phone_whatsapp: "",
                         email: "",
                         website: "",
-                        address: "",
+                        address_full: "",
                         city: "",
                         state: "",
-                        zip_code: "",
+                        postal_code: "",
                         business_hours: defaultBusinessHours,
                       });
                       setPreviewImage(null);
