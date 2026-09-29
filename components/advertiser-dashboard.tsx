@@ -368,7 +368,7 @@ export function AdvertiserDashboard({
                             : listing.plan_tier}
                         </Badge>
                       </div>
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                      <div className="grid grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-muted-foreground">
                             Visualizações
@@ -383,24 +383,6 @@ export function AdvertiserDashboard({
                           </p>
                           <p className="text-xl font-semibold">
                             {((listing.clicks_whatsapp_count || 0) + (listing.clicks_phone_count || 0))}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Avaliação
-                          </p>
-                          <p className="text-xl font-semibold">
-                            {listing.average_rating > 0
-                              ? listing.average_rating.toFixed(1)
-                              : "—"}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="text-sm text-muted-foreground">
-                            Avaliações
-                          </p>
-                          <p className="text-xl font-semibold">
-                            {listing.review_count}
                           </p>
                         </div>
                       </div>
