@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ListingCard } from "@/components/listing-card";
+import { DemandCaptureCard } from "@/components/demand-capture-card";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import type { ListingWithDetails, Category } from "@/lib/types/database";
@@ -238,25 +239,35 @@ export function SearchResults({
                 </div>
               )}
             </>
+          ) : query ? (
+            <div className="space-y-8 py-12">
+              <div className="text-center">
+                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+                  <Search className="h-8 w-8 text-muted-foreground" />
+                </div>
+                <h2 className="mb-2 text-xl font-semibold">
+                  Ainda não encontramos uma opção cadastrada
+                </h2>
+                <p className="text-muted-foreground">
+                  Sua procura não precisa terminar aqui.
+                </p>
+              </div>
+              <DemandCaptureCard query={query} city={city} />
+            </div>
           ) : (
             <div className="py-16 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                 <Search className="h-8 w-8 text-muted-foreground" />
               </div>
               <h2 className="mb-2 text-xl font-semibold">
-                Nenhum resultado encontrado
+                Comece dizendo o que você precisa
               </h2>
               <p className="mb-6 text-muted-foreground">
-                Tente buscar com outros termos ou{" "}
-                <button
-                  onClick={clearFilters}
-                  className="text-primary underline"
-                >
-                  remova os filtros
-                </button>
+                Pesquise por serviço, profissional ou negócio. Se não houver uma
+                opção cadastrada, você poderá registrar sua procura.
               </p>
               <Link href="/cadastrar">
-                <Button size="lg">Cadastre seu negócio</Button>
+                <Button variant="outline" size="lg">Tenho um negócio para cadastrar</Button>
               </Link>
             </div>
           )}
