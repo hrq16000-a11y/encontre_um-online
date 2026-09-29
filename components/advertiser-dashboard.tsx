@@ -283,7 +283,7 @@ export function AdvertiserDashboard({
                           <div className="mt-2 flex items-center gap-4 text-sm">
                             <div className="flex items-center gap-1 text-muted-foreground">
                               <Eye className="h-4 w-4" />
-                              {listing.views_count} views
+                              {listing.views_count || 0} views
                             </div>
                             <div className="flex items-center gap-1 text-muted-foreground">
                               <MessageCircle className="h-4 w-4" />
@@ -374,7 +374,7 @@ export function AdvertiserDashboard({
                             Visualizações
                           </p>
                           <p className="text-xl font-semibold">
-                            {listing.views_count}
+                            {listing.views_count || 0}
                           </p>
                         </div>
                         <div>
