@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { normalizeBrazilWhatsApp } from "@/lib/utils/phone";
+import { trackListingContact } from "@/lib/analytics/client";
 
 interface ListingCardProps {
   listing: ListingWithDetails;
@@ -53,6 +54,7 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
     e.preventDefault();
     if (listing.phone_whatsapp) {
       const phone = normalizeBrazilWhatsApp(listing.phone_whatsapp);
+      trackListingContact(listing.id, "whatsapp_click");
       window.open(`https://wa.me/${phone}?text=Vi+no+EncontreUm`, "_blank");
       onContact?.("whatsapp", listing.id);
     }
@@ -61,6 +63,7 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
   const handlePhoneClick = (e: React.MouseEvent) => {
     e.preventDefault();
     if (listing.phone_primary) {
+      trackListingContact(listing.id, "phone_click");
       window.location.href = `tel:${listing.phone_primary}`;
       onContact?.("phone", listing.id);
     }
