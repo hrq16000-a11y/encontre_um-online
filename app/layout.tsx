@@ -1,45 +1,59 @@
-import React from "react"
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
-import './globals.css'
+import React from "react";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: 'EncontreUm - Encontre Profissionais e Servicos',
-  description: 'O maior diretorio de profissionais e servicos do Brasil. Conectamos voce aos melhores profissionais da sua cidade. Mecanicos, eletricistas, encanadores, advogados e mais.',
-  keywords: 'profissionais, servicos, mecanico, eletricista, encanador, advogado, dentista, contador, Brasil',
-  generator: 'v0.app',
+  metadataBase: new URL("https://encontreum.online"),
+  title: {
+    default: "Encontre Um | Serviços, profissionais e negócios perto de você",
+    template: "%s | Encontre Um",
+  },
+  description:
+    "Encontre serviços, profissionais e negócios na sua região. Pesquise o que precisa e descubra opções para entrar em contato.",
+  alternates: {
+    canonical: "/",
+  },
   openGraph: {
-    title: 'EncontreUm - Encontre Profissionais e Servicos',
-    description: 'O maior diretorio de profissionais e servicos do Brasil.',
-    type: 'website',
-    locale: 'pt_BR',
+    title: "Encontre Um | Serviços, profissionais e negócios perto de você",
+    description:
+      "Pesquise o que precisa, informe sua região e encontre opções de atendimento.",
+    type: "website",
+    locale: "pt_BR",
+    url: "https://encontreum.online",
+    siteName: "Encontre Um",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Encontre Um",
+    description: "Serviços, profissionais e negócios perto de você.",
   },
   icons: {
     icon: [
       {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
+        url: "/icon-light-32x32.png",
+        media: "(prefers-color-scheme: light)",
       },
       {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
+        url: "/icon-dark-32x32.png",
+        media: "(prefers-color-scheme: dark)",
       },
       {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
+        url: "/icon.svg",
+        type: "image/svg+xml",
       },
     ],
-    apple: '/apple-icon.png',
+    apple: "/apple-icon.png",
   },
-}
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="pt-BR">
@@ -48,5 +62,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  )
+  );
 }
