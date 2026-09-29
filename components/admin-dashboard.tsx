@@ -19,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { Profile, ListingWithDetails } from "@/lib/types/database";
+import { AdminGrowthPanel } from "@/components/admin-growth-panel";
 import {
   Building2,
   Users,
@@ -220,6 +221,8 @@ export function AdminDashboard({
             </CardContent>
           </Card>
         )}
+
+        <AdminGrowthPanel />
 
         {/* Main Content */}
         <Tabs defaultValue="pending" className="space-y-6">
