@@ -7,7 +7,7 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://encontreum.online"),
+  metadataBase: new URL("https://www.encontreum.online"),
   title: {
     default: "Encontre Um | Serviços, profissionais e negócios perto de você",
     template: "%s | Encontre Um",
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
       "Pesquise o que precisa, informe sua região e encontre opções de atendimento.",
     type: "website",
     locale: "pt_BR",
-    url: "https://encontreum.online",
+    url: "https://www.encontreum.online",
     siteName: "Encontre Um",
   },
   twitter: {
