@@ -10,9 +10,7 @@ import {
   Phone,
   MessageCircle,
   MapPin,
-  Star,
   Clock,
-  BadgeCheck,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -71,9 +69,9 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
     <Card className="group overflow-hidden border-border/50 transition-all hover:border-primary/30 hover:shadow-lg">
       <Link href={`/${listing.slug}`}>
         <div className="relative h-40 overflow-hidden bg-muted">
-          {listing.cover_url ? (
+          {listing.cover_image_url ? (
             <Image
-              src={listing.cover_url || "/placeholder.svg"}
+              src={listing.cover_image_url || "/placeholder.svg"}
               alt={listing.title}
               fill
               className="object-cover transition-transform group-hover:scale-105"
@@ -90,15 +88,6 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
               Destaque
             </Badge>
           )}
-          {listing.is_verified && (
-            <Badge
-              variant="secondary"
-              className="absolute right-2 top-2 gap-1 bg-primary text-primary-foreground"
-            >
-              <BadgeCheck className="h-3 w-3" />
-              Verificado
-            </Badge>
-          )}
         </div>
       </Link>
 
@@ -110,17 +99,6 @@ export function ListingCard({ listing, onContact }: ListingCardProps) {
                 {listing.title}
               </h3>
             </Link>
-            {listing.average_rating > 0 && (
-              <div className="flex items-center gap-1 text-sm">
-                <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                <span className="font-medium">
-                  {listing.average_rating.toFixed(1)}
-                </span>
-                <span className="text-muted-foreground">
-                  ({listing.review_count})
-                </span>
-              </div>
-            )}
           </div>
 
           <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
