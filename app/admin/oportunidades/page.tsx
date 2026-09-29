@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Search, MapPin, MessageCircle, TrendingUp } from "lucide-react";
+import { DemandStatusActions } from "@/components/demand-status-actions";
 
 export const metadata: Metadata = {
   title: "Oportunidades | Admin",
@@ -197,16 +198,22 @@ export default async function OpportunitiesPage() {
                           {new Date(demand.created_at).toLocaleString("pt-BR")}
                         </p>
                       </div>
-                      <a
-                        href={`https://wa.me/${waNumber}`}
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <Button className="gap-2">
-                          <MessageCircle className="h-4 w-4" />
-                          WhatsApp
-                        </Button>
-                      </a>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <a
+                          href={`https://wa.me/${waNumber}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          <Button className="gap-2">
+                            <MessageCircle className="h-4 w-4" />
+                            WhatsApp
+                          </Button>
+                        </a>
+                        <DemandStatusActions
+                          demandId={demand.id}
+                          currentStatus={demand.status}
+                        />
+                      </div>
                     </div>
                   );
                 })}
