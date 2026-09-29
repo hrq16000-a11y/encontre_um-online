@@ -139,14 +139,11 @@ export default async function BusinessPage({ params }: BusinessPageProps) {
   // Get reviews
   const { data: reviews } = await supabase
     .from("reviews")
-    .select(`*, user:profiles(id, full_name, avatar_url)`)
+    .select("id, rating, comment, author_name, created_at")
     .eq("listing_id", listing.id)
     .eq("status", "approved")
     .order("created_at", { ascending: false })
     .limit(10);
-
-  // Increment view count using RPC function
-  await supabase.rpc("increment_listing_views", { listing_uuid: listing.id });
 
   // Log analytics event
   await supabase.from("analytics_events").insert({
