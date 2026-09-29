@@ -215,7 +215,7 @@ export function BusinessDetailPage({ listing, reviews }: BusinessDetailPageProps
                 {listing.plan_tier === "premium" && (
                   <Badge className="gap-1 bg-primary">
                     <BadgeCheck className="h-3 w-3" />
-                    Verificado
+                    Destaque
                   </Badge>
                 )}
               </div>
