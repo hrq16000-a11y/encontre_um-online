@@ -31,5 +31,11 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      - name: Lint
+        run: pnpm lint
+
+      - name: Brand/domain gate
+        run: node scripts/check-brand-domain.mjs
+
       - name: Build
         run: pnpm build
