@@ -35,7 +35,7 @@ export async function updateSession(request: NextRequest) {
 
   // Protect dashboard and admin routes
   if (
-    (request.nextUrl.pathname.startsWith("/dashboard") ||
+    (request.nextUrl.pathname.startsWith("/painel") ||
       request.nextUrl.pathname.startsWith("/admin")) &&
     !user
   ) {
@@ -54,7 +54,7 @@ export async function updateSession(request: NextRequest) {
 
     if (profile?.role !== "admin") {
       const url = request.nextUrl.clone();
-      url.pathname = "/dashboard";
+      url.pathname = "/painel";
       return NextResponse.redirect(url);
     }
   }
