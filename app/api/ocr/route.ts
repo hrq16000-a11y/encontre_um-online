@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       system: systemPrompt,
-      maxTokens: 1000,
+      maxOutputTokens: 1000,
     });
 
     // Parse the response
