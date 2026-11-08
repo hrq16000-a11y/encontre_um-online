@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { SearchResults } from "@/components/search-results";
 import { buildListingOrFilter, matchingCategoryIds, sanitizeSearchTerm, sanitizeSlug } from "@/lib/search/query";
+import { FALLBACK_CATEGORIES } from "@/lib/catalog/fallback-categories";
 
 interface SearchPageProps {
   searchParams: Promise<{
@@ -45,10 +46,15 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const supabase = await createClient();
 
-  const { data: categories } = await supabase
+  const { data: databaseCategories } = await supabase
     .from("categories")
     .select("id, name, slug, icon, description")
     .order("name", { ascending: true });
+
+  const categories =
+    databaseCategories && databaseCategories.length > 0
+      ? databaseCategories
+      : FALLBACK_CATEGORIES;
 
   let listingsQuery = supabase
     .from("listings")
@@ -67,7 +73,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   if (query) {
     const categoryIds = categorySlug
       ? []
-      : matchingCategoryIds(categories || [], query);
+      : matchingCategoryIds(databaseCategories || [], query);
 
     listingsQuery = listingsQuery.or(
       buildListingOrFilter(query, categoryIds),

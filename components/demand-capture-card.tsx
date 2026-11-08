@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2, MessageCircle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,26 @@ export function DemandCaptureCard({ query, city }: DemandCaptureCardProps) {
   const [whatsapp, setWhatsapp] = useState("");
   const [company, setCompany] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [backendStatus, setBackendStatus] = useState<"checking" | "online" | "offline">("checking");
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void fetch("/api/health", { cache: "no-store" })
+      .then((response) => {
+        if (!cancelled) {
+          setBackendStatus(response.ok ? "online" : "offline");
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setBackendStatus("offline");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -56,6 +75,22 @@ export function DemandCaptureCard({ query, city }: DemandCaptureCardProps) {
       setIsSubmitting(false);
     }
   };
+
+  if (backendStatus === "offline") {
+    return (
+      <Card className="mx-auto max-w-2xl border-amber-500/30">
+        <CardContent className="py-10 text-center">
+          <MessageCircle className="mx-auto mb-4 h-10 w-10 text-amber-500" />
+          <h2 className="mb-2 text-xl font-semibold">Solicitações temporariamente indisponíveis</h2>
+          <p className="text-muted-foreground">
+            A busca continua disponível, mas não vamos pedir seu WhatsApp enquanto
+            o recebimento de solicitações não estiver funcionando normalmente.
+            Tente novamente mais tarde.
+          </p>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (status?.type === "success") {
     return (
@@ -106,8 +141,18 @@ export function DemandCaptureCard({ query, city }: DemandCaptureCardProps) {
           {status?.type === "error" && (
             <p className="text-sm text-destructive">{status.message}</p>
           )}
-          <Button type="submit" className="w-full" size="lg" disabled={isSubmitting}>
-            {isSubmitting ? (
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            disabled={isSubmitting || backendStatus !== "online"}
+          >
+            {backendStatus === "checking" ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Verificando disponibilidade...
+              </>
+            ) : isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Registrando...
