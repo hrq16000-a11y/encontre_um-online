@@ -1,30 +1,47 @@
-# Local business directory landing page
+# EncontreUm.online
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Portal para transformar intenção real em valor econômico: buscas, leads, cadastros de oferta, contatos e dados de crescimento.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/hrq16000-5874s-projects/v0-local-business-directory-landin)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/oDls0GvfxDU)
+## Produção
 
-## Overview
+- Site: https://www.encontreum.online
+- GitHub: fonte de verdade
+- Vercel: build e produção
+- Supabase: dados transacionais
+- v0: apoio visual/prototipação quando útil
+- Lovable: fora do fluxo padrão
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Fluxo de desenvolvimento
 
-## Deployment
+Mudanças não triviais seguem:
 
-Your project is live at:
+1. branch curta;
+2. implementação mínima útil;
+3. typecheck;
+4. gates de domínio e links internos;
+5. build;
+6. pull request;
+7. merge somente com CI verde;
+8. validação em produção.
 
-**[https://vercel.com/hrq16000-5874s-projects/v0-local-business-directory-landin](https://vercel.com/hrq16000-5874s-projects/v0-local-business-directory-landin)**
+Leia antes de alterar:
+- `AGENTS.md`
+- `docs/ENCONTREUM_REVENUE_ENGINE.md`
+- `docs/ECOSYSTEM_AUTOPILOT.md`
 
-## Build your app
+## Saúde
 
-Continue building your app on:
+Endpoint:
 
-**[https://v0.app/chat/oDls0GvfxDU](https://v0.app/chat/oDls0GvfxDU)**
+`GET /api/health`
 
-## How It Works
+Ele verifica configuração pública necessária e conectividade com o Supabase sem revelar credenciais ou dados privados.
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+## Princípios
+
+- não inventar empresas, profissionais, reviews ou métricas;
+- não criar páginas SEO finas em massa;
+- capturar demanda quando ainda não houver oferta;
+- usar dados reais para decidir expansão;
+- GitHub é a fonte de verdade;
+- automação economy-first e orientada a eventos.
