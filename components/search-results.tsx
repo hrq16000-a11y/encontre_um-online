@@ -15,6 +15,8 @@ import type { ListingWithDetails, Category } from "@/lib/types/database";
 import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { getTrafficAttribution } from "@/lib/attribution/client";
+import { track } from "@vercel/analytics";
+import { knownCategorySlug } from "@/lib/catalog/fallback-categories";
 
 interface SearchResultsProps {
   listings: ListingWithDetails[];
@@ -64,7 +66,14 @@ export function SearchResults({
         attribution,
       }),
     }).catch(() => {
-      // Telemetry must never block the search experience.
+      // Supabase telemetry must never block the search experience.
+    });
+
+    track("Search intent", {
+      category: knownCategorySlug(query, categorySlug),
+      queryProvided: Boolean(query),
+      cityProvided: Boolean(city),
+      resultState: total > 0 ? "results" : "zero",
     });
   }, [query, categorySlug, city, total, currentPage]);
 
