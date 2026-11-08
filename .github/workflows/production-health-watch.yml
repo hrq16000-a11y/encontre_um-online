@@ -1,0 +1,85 @@
+name: Production health watch
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      GH_REPO: ${{ github.repository }}
+      INCIDENT_TITLE: "[health] EncontreUm production"
+    steps:
+      - name: Check production endpoints
+        id: check
+        shell: bash
+        run: |
+          set -u
+
+          failed=0
+          report=""
+
+          check_url() {
+            name="$1"
+            url="$2"
+            expected="$3"
+
+            code="$(curl --location --silent --show-error --max-time 20               --output "/tmp/${name}.body"               --write-out "%{http_code}"               "$url" || printf "000")"
+
+            if [ "$code" = "$expected" ]; then
+              report="${report}✅ ${name}: HTTP ${code}\n"
+            else
+              failed=1
+              report="${report}❌ ${name}: HTTP ${code} (esperado ${expected})\n"
+            fi
+          }
+
+          check_url "home" "https://www.encontreum.online/" "200"
+          check_url "robots" "https://www.encontreum.online/robots.txt" "200"
+          check_url "sitemap" "https://www.encontreum.online/sitemap.xml" "200"
+          check_url "health" "https://www.encontreum.online/api/health" "200"
+
+          {
+            echo "failed=${failed}"
+            echo "report<<EOF"
+            printf "%b" "$report"
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+          {
+            echo "## EncontreUm production health"
+            printf "%b" "$report"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Open incident when unhealthy
+        if: steps.check.outputs.failed == '1'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPORT: ${{ steps.check.outputs.report }}
+        shell: bash
+        run: |
+          existing="$(gh issue list             --repo "$GH_REPO"             --state open             --search ""$INCIDENT_TITLE" in:title"             --json number             --jq '.[0].number // empty')"
+
+          if [ -z "$existing" ]; then
+            gh issue create               --repo "$GH_REPO"               --title "$INCIDENT_TITLE"               --body "$(printf 'Monitor automático detectou falha em produção.\n\n%s\n\nWorkflow: %s/actions/runs/%s' "$REPORT" "$GITHUB_SERVER_URL/$GH_REPO" "$GITHUB_RUN_ID")"
+          fi
+
+      - name: Close incident on recovery
+        if: steps.check.outputs.failed == '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          existing="$(gh issue list             --repo "$GH_REPO"             --state open             --search ""$INCIDENT_TITLE" in:title"             --json number             --jq '.[0].number // empty')"
+
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing"               --repo "$GH_REPO"               --body "Monitor automático confirmou recuperação dos endpoints de produção."
+            gh issue close "$existing"               --repo "$GH_REPO"               --reason completed
+          fi
