@@ -118,3 +118,12 @@ Uma mudança só está concluída quando:
 - não abriu regressão de SEO, segurança ou funil;
 - deploy foi verificado quando aplicável;
 - métricas/telemetria relevantes existem quando a função afeta receita ou lead.
+
+## Adoção visual de referências externas (17/11/2026)
+
+- **TasteSkill** (https://www.tasteskill.dev/): usar como referência crítica de direção de arte, identidade, hierarquia e layout; preservar a marca e criar composição original.
+- **Transitions.dev** (https://transitions.dev/): adotar microtransições CSS pontuais em menus, filtros, modais e feedback; respeitar teclado, foco, contraste e `prefers-reduced-motion`. Evitar `transition: all`.
+- **React Bits** (https://reactbits.dev/): avaliar componentes React gratuitos individualmente e verificar licença MIT + Commons Clause, dependências e custo de hidratação. Sem instalação em massa ou uso de Pro não licenciado.
+- **RiseClub** (https://riseclub.tech/): somente benchmark de comunidade, trilhas, notícias e engajamento; nunca copiar conteúdo, interface, imagens ou dados.
+- Aplicação específica: Busca, cartões de oferta, filtros e cadastro. Não inventar prestadores, reviews ou indicadores; preservar dados reais, funis, conversão e segurança dos leads.
+- Implementar em micro-PR própria, medir 390/1440 e preservar SEO, SSR (se houver), LCP, segurança, privacidade, funis e conteúdo factual. Nenhuma regra aqui autoriza mexer em produção, banco, RLS, DNS ou pagamentos.
