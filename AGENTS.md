@@ -127,3 +127,12 @@ Uma mudança só está concluída quando:
 - **RiseClub** (https://riseclub.tech/): somente benchmark de comunidade, trilhas, notícias e engajamento; nunca copiar conteúdo, interface, imagens ou dados.
 - Aplicação específica: Busca, cartões de oferta, filtros e cadastro. Não inventar prestadores, reviews ou indicadores; preservar dados reais, funis, conversão e segurança dos leads.
 - Implementar em micro-PR própria, medir 390/1440 e preservar SEO, SSR (se houver), LCP, segurança, privacidade, funis e conteúdo factual. Nenhuma regra aqui autoriza mexer em produção, banco, RLS, DNS ou pagamentos.
+
+## Seleção contextual de skills compartilhadas (20/11/2026)
+
+Este repositório participa do repertório de métodos de desenvolvimento reutilizáveis; seus contratos locais, regras de dados, identidade e gates sempre prevalecem. **Usar todas as competências pertinentes**, não instalar todas as ferramentas nem introduzir efeitos gratuitos.
+- **Reanimate** (https://github.com/NiazMorshed2007/reanimate): adaptar apenas o método de engenharia de motion — observar estados/tempo/easing, criar solução autoral com CSS/WAAPI ou lib já existente, comparar capturas; não baixar, executar ou incorporar runtime de terceiros.
+- **Gists públicos de QA**: diagnosticar oclusão mobile/CTA com https://gist.github.com/tobiashochguertel/bf7bc60f8946c7ecbe0d14782b4a8c99 e planejar capturas 390/1440 com https://gist.github.com/michael-matias-2026/d80389dfa08f4db9c5cc6020adf911ce ; são referências, não código para copiar/executar sem licença e revisão.
+- **Playwright/a11y**: testar teclado, foco, touch, `prefers-reduced-motion`, overflow, loading/erro e desempenho somente quando pertinentes, preferindo os testes existentes. Adoção de SQL/RLS requer autorização separada e apenas hipóteses verificadas contra PostgreSQL oficial; nunca executar SQL de Gists em produção.
+- **Foco local:** jornada busca → lead → oferta real e crescimento verificável. Não criar motion que atrapalhe CTA/SSR, não afetar tráfego/indexação, Supabase/RLS ou métricas; seguir `docs/ENCONTREUM_REVENUE_ENGINE.md` e política economy-first.
+- Em cada micro-PR registrar `USE/ADAPT/REJECT/NOT_APPLICABLE`, custo, risco, licença, evidências e gates efetivamente executados. Sem mudança de banco, dados, DNS, segurança, funis ou produção; sem Lovable Max ou instaladores externos automáticos.
