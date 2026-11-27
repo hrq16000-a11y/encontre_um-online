@@ -1,8 +1,5 @@
-"use client";
-
 import Link from "next/link";
 import { CheckCircle, ArrowRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 const benefits = [
   "Cadastro inicial gratuito",
@@ -12,39 +9,28 @@ const benefits = [
 
 export function BusinessCTASection() {
   return (
-    <section className="bg-primary px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
-      <div className="mx-auto max-w-4xl text-center">
-        <h2 className="mb-6 text-balance text-3xl font-bold tracking-tight text-primary-foreground sm:text-4xl md:text-5xl">
-          Presta serviço ou tem um negócio?
-        </h2>
-        <p className="mx-auto mb-8 max-w-2xl text-xl text-primary-foreground/80">
-          Cadastre sua atividade para aparecer quando alguém procurar pelo que
-          você oferece na sua região.
-        </p>
-
-        <div className="mb-10 flex items-center justify-center">
-          <Link href="/cadastrar">
-            <Button
-              size="lg"
-              className="rounded-xl bg-background px-8 py-6 text-lg font-bold text-foreground hover:bg-background/90"
-            >
-              Cadastrar meu negócio
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+    <section aria-labelledby="home-business-title" className="bg-background px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
+      <div className="mx-auto grid max-w-6xl items-center gap-9 overflow-hidden rounded-[1.75rem] bg-[#092b4f] p-7 text-white sm:p-12 lg:grid-cols-[1.12fr_.88fr] lg:gap-16">
+        <div className="min-w-0">
+          <p className="mb-4 text-xs font-semibold uppercase tracking-[.15em] text-blue-200">Para profissionais e negócios</p>
+          <h2 id="home-business-title" className="text-balance text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-5xl">
+            Presta serviço ou tem um negócio?
+          </h2>
+          <p className="mt-4 max-w-lg leading-relaxed text-blue-100">
+            Cadastre sua atividade para aparecer quando alguém procurar pelo que você oferece na sua região.
+          </p>
+          <Link href="/cadastrar" className="group mt-7 inline-flex min-h-12 items-center gap-3 rounded-xl bg-white px-5 py-3 font-semibold text-[#092b4f] hover:bg-blue-50 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white motion-safe:transition-colors motion-safe:duration-150">
+            Cadastrar meu negócio <ArrowRight aria-hidden="true" className="h-4 w-4 motion-safe:transition-transform motion-safe:duration-150 motion-safe:group-hover:translate-x-0.5" />
           </Link>
         </div>
-
-        <div className="flex flex-wrap items-center justify-center gap-6">
-          {benefits.map((benefit) => (
-            <div
-              key={benefit}
-              className="flex items-center gap-2 text-primary-foreground/80"
-            >
-              <CheckCircle className="h-5 w-5 text-accent" />
-              <span>{benefit}</span>
-            </div>
+        <ul className="min-w-0 space-y-0 border-t border-white/20 lg:border-t-0 lg:border-l lg:pl-10">
+          {benefits.map((benefit, index) => (
+            <li key={benefit} className={`flex items-center gap-3 py-4 text-sm leading-relaxed text-blue-50 sm:text-base ${index ? "border-t border-white/15" : ""}`}>
+              <CheckCircle aria-hidden="true" className="h-5 w-5 shrink-0 text-blue-200" />
+              {benefit}
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );
