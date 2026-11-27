@@ -1,7 +1,5 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/server";
 
 export async function CategoriesSection() {
@@ -16,11 +14,12 @@ export async function CategoriesSection() {
   if (!categories?.length) return null;
 
   return (
-    <section className="bg-background px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+    <section aria-labelledby="home-categories-title" className="border-b border-border bg-background px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto max-w-6xl">
-        <div className="mb-12 flex items-center justify-between">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
           <div>
-            <h2 className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[.15em] text-primary">Explore por interesse</p>
+            <h2 id="home-categories-title" className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
               Explore categorias
             </h2>
             <p className="text-muted-foreground">
@@ -29,39 +28,29 @@ export async function CategoriesSection() {
           </div>
           <Link
             href="/buscar"
-            className="hidden items-center gap-1 font-medium text-primary hover:underline sm:flex"
+            className="inline-flex min-h-11 items-center gap-2 font-semibold text-primary underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
           >
             Ver todas
             <ArrowRight className="h-4 w-4" />
           </Link>
         </div>
 
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {categories.map((category) => (
-            <Link key={category.id} href={`/buscar?category=${category.slug}`}>
-              <Card className="group h-full cursor-pointer p-6 transition-all duration-300 hover:border-primary/50 hover:shadow-lg">
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-2xl transition-colors group-hover:bg-primary/20">
-                  {category.icon || "🔎"}
+            <li key={category.id} className="min-w-0">
+              <Link href={`/buscar?category=${category.slug}`} className="group flex h-full min-w-0 flex-col gap-3 rounded-xl border border-border bg-card p-5 hover:border-primary/50 hover:bg-secondary/30 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring motion-safe:transition-colors motion-safe:duration-150">
+                <div className="flex items-center justify-between gap-3">
+                  <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-xl">{category.icon || "🔎"}</span>
+                  <ArrowRight aria-hidden="true" className="h-4 w-4 shrink-0 text-muted-foreground group-hover:text-primary" />
                 </div>
-                <h3 className="mb-1 font-semibold text-foreground transition-colors group-hover:text-primary">
-                  {category.name}
-                </h3>
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {category.description || "Encontre opções nessa categoria."}
-                </p>
-              </Card>
-            </Link>
+                <div>
+                  <h3 className="mb-1 font-semibold text-card-foreground">{category.name}</h3>
+                  <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{category.description || "Encontre opções nessa categoria."}</p>
+                </div>
+              </Link>
+            </li>
           ))}
-        </div>
-
-        <div className="mt-8 text-center sm:hidden">
-          <Link href="/buscar">
-            <Button variant="outline" className="rounded-xl bg-transparent">
-              Ver todas as categorias
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </Link>
-        </div>
+        </ul>
       </div>
     </section>
   );
