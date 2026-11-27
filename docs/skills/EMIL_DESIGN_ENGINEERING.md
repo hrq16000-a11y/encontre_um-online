@@ -1,9 +1,9 @@
 # Design engineering premium — análise e adoção Emil Kowalski
 
-**Estado:** R0 — diagnóstico estático e diretriz documental; implementação NÃO iniciada.
+**Estado:** R0 + R1.3 — diagnóstico estático e auditoria inicial desktop/mobile; implementação NÃO iniciada.
 **Data:** 27/11/2026 • **Repositório:** hrq16000-a11y/encontre_um-online • **Checkpoint analisado da main:** `f80206213743c279f40a3812da0f09a5d799dc3d`.
 
-Este documento é incremental. As regras locais de AGENTS.md, DESIGN.md, segurança, SEO, arquitetura, publicação, dados e funis prevalecem. Não autoriza alterações de runtime, instalações, custos, merge ou deploy. Não substitui a homologação visual da versão efetivamente publicada. O navegador ao vivo teve timeout nesta rodada; nenhuma inspeção de screenshots, teste visual, medição de performance ou aprovação de produção é reivindicada.
+Este documento é incremental. As regras locais de AGENTS.md, DESIGN.md, segurança, SEO, arquitetura, publicação, dados e funis prevalecem. Não autoriza alterações de runtime, instalações, custos, merge ou deploy. Não substitui a homologação visual da versão efetivamente publicada. Auditoria ao vivo posterior registrada na seção 7; não implica homologação da versão publicada.
 
 ## 1. Diagnóstico por projeto (evidência de leitura)
 
@@ -74,3 +74,13 @@ Se não existirem tokens equivalentes, avaliar curva de entrada/saída `cubic-be
 GO para implementação somente com baseline visual, brief próprio da marca, propósito de cada movimento, seleção dos módulos pertinentes e uma micro-superfície definida. GO para release somente com gates locais, comparação real nos viewports, interação funcional, reduced-motion, zero regressão crítica de performance/conversão, sem novos riscos de acessibilidade, SSR/SEO e privacidade. NO-GO se movimento interferir na ação, se houver conteúdo invisível, template copiado, alteração comercial incidental, bloqueio de dados, dependência sem justificativa ou validação inconclusiva.
 
 **Registro desta rodada:** leitura de referências e arquivos; documentação proposta/registrada em branch isolada. Nenhum código de aplicação, dependência, banco, DNS ou configuração de hospedagem foi alterado por esta diretriz.
+
+## 7. R1.3 — Auditoria visual inicial da Home (27/11/2026)
+
+- **URL pública observada:** https://www.encontreum.online/
+- **Viewport medido:** 390 × 844 CSS px, scrollWidth 371; 1440 × 900 CSS px, scrollWidth 1421.
+- **Evidência:** captura(s) do primeiro viewport, leitura de DOM/estado público. Home clara de busca local, com headline legível, formulário explicitamente dividido em procura e região, exemplos e CTA azul. Desktop duas colunas equilibradas; mobile empilhamento mantém os campos e CTA visíveis na primeira dobra. A comunicação para cadastro não compete fortemente com a busca. H1 presente, sem overflow nas duas medições. Não testei envio de busca nem disponibilidade dos resultados.
+- **P0 — prioridade antes de prototipar:** Preservar ação primária, rótulos, navegação local e fallback de ausência de resultado. Validar teclado, zoom, texto longo, foco e retorno da busca.
+- **P1 — direção de arte e motion:** Refinar detalhes autorais de tipografia/ritmo e seleção de exemplos, foco no campo e feedback do CTA; sem carrossel, 3D ou animação de listas por padrão. Usar como referência de clareza funcional, não copiar a aparência para outros portais.
+- **Skills aplicáveis:** find-animation-opportunities, remove-animations, review-animations, emil-design-eng, animation-performance, break-ui, mobile-native; prototype após diagnóstico completo.
+- **Limites:** Tablet, outras rotas, teclado, reduced-motion, LCP/CLS/INP, build/deployment SHA e funil completo pendentes. Não houve submissão de formulário, WhatsApp, alteração de consentimento, código, dependências, dados, produção ou merge. Não incluímos screenshots no Git. Esta é baseline inicial, não homologação.
