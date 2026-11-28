@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BusinessDetailPage } from "@/components/business-detail-page";
+import { listingSocialImage } from "@/lib/social-image";
 
 // Reserved slugs that should not be treated as business pages
 const RESERVED_SLUGS = [
@@ -52,6 +53,9 @@ export async function generateMetadata({
     listing.description ||
     `${listing.title} em ${listing.city}, ${listing.state}. Contato direto via WhatsApp.`;
 
+  const socialImage = listingSocialImage(listing.cover_image_url, listing.title);
+  const canonical = `https://www.encontreum.online/${slug}`;
+
   return {
     title,
     description,
@@ -60,15 +64,18 @@ export async function generateMetadata({
       description,
       type: "website",
       locale: "pt_BR",
-      images: listing.cover_image_url ? [listing.cover_image_url] : [],
+      url: canonical,
+      siteName: "Encontre Um",
+      images: [socialImage],
     },
     twitter: {
       card: "summary_large_image",
       title: listing.title,
       description,
+      images: [{ url: socialImage.url, alt: socialImage.alt }],
     },
     alternates: {
-      canonical: `https://www.encontreum.online/${slug}`,
+      canonical,
     },
   };
 }

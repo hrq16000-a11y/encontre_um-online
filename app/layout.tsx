@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { AttributionCapture } from "@/components/attribution-capture";
+import { DEFAULT_SOCIAL_IMAGE } from "@/lib/social-image";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -26,11 +27,13 @@ export const metadata: Metadata = {
     locale: "pt_BR",
     url: "https://www.encontreum.online",
     siteName: "Encontre Um",
+    images: [DEFAULT_SOCIAL_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: "Encontre Um",
     description: "Serviços, profissionais e negócios perto de você.",
+    images: [{ url: DEFAULT_SOCIAL_IMAGE.url, alt: DEFAULT_SOCIAL_IMAGE.alt }],
   },
   icons: {
     icon: [
