@@ -17,6 +17,7 @@ import Link from "next/link";
 import { getTrafficAttribution } from "@/lib/attribution/client";
 import { track } from "@vercel/analytics";
 import { knownCategorySlug } from "@/lib/catalog/fallback-categories";
+import { demandContext } from "@/lib/search/demand-context";
 
 interface SearchResultsProps {
   listings: ListingWithDetails[];
@@ -43,6 +44,9 @@ export function SearchResults({
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
   const trackedSearch = useRef("");
+  const demand = demandContext(query, categorySlug, categories, city);
+
+  useEffect(() => setSearchQuery(query), [query]);
 
   useEffect(() => {
     if (currentPage !== 1 || (!query && !categorySlug && !city)) return;
@@ -290,13 +294,9 @@ export function SearchResults({
                 </p>
               </div>
               <DemandCaptureCard
-                query={
-                  query ||
-                  categories.find((category) => category.slug === categorySlug)?.name ||
-                  categorySlug ||
-                  "Serviço ou negócio local"
-                }
-                city={city}
+                key={JSON.stringify([query, categorySlug, city])}
+                query={demand.query}
+                city={demand.city}
               />
             </div>
           ) : (
